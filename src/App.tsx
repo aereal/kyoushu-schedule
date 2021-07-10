@@ -5,6 +5,7 @@ import {
   ReservationsProvider,
   useReservertionsState,
 } from "./repositories/reservations";
+import { CustomThemeProvider } from "./theme";
 import { ReservationSchedule } from "./types";
 import { newDefault履修済み教科, 履修済み教科Context } from "./履修済み教科";
 
@@ -52,18 +53,20 @@ const App: FC = () => {
     setReservations(new Map(reservations.entries()));
   };
   return (
-    <履修済み教科Context.Provider value={履修済み教科}>
-      <ReservationsProvider value={reservations}>
-        <SchedulesList onClickJigenButton={onClickJigenButton} />
-        <JigenDialog
-          open={dialogIsOpened}
-          onClose={onCloseDialog}
-          schedule={selectedSchedule}
-          onCheck履修={onCheck履修}
-          onCheckReservation={onCheckReservation}
-        />
-      </ReservationsProvider>
-    </履修済み教科Context.Provider>
+    <CustomThemeProvider>
+      <履修済み教科Context.Provider value={履修済み教科}>
+        <ReservationsProvider value={reservations}>
+          <SchedulesList onClickJigenButton={onClickJigenButton} />
+          <JigenDialog
+            open={dialogIsOpened}
+            onClose={onCloseDialog}
+            schedule={selectedSchedule}
+            onCheck履修={onCheck履修}
+            onCheckReservation={onCheckReservation}
+          />
+        </ReservationsProvider>
+      </履修済み教科Context.Provider>
+    </CustomThemeProvider>
   );
 };
 
