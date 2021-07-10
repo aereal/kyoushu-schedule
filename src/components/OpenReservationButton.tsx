@@ -3,7 +3,7 @@ import AddIcon from "@material-ui/icons/Add";
 import CheckIcon from "@material-ui/icons/Check";
 import React, { FC } from "react";
 import { ReservationSchedule } from "../types";
-import { 履修済み教科 } from "../履修済み教科";
+import { use履修済み教科 } from "../履修済み教科";
 
 export interface OpenReservationButtonProps {
   readonly onClick: (schedule: ReservationSchedule) => void;
@@ -43,9 +43,13 @@ const ReserveButton: FC<OpenReservationButtonProps> = ({
   </Button>
 );
 
-export const OpenReservationButton: FC<OpenReservationButtonProps> = (props) =>
-  履修済み教科.has(props.schedule.教科) ? (
+export const OpenReservationButton: FC<OpenReservationButtonProps> = (
+  props
+) => {
+  const 履修済み教科 = use履修済み教科();
+  return 履修済み教科.has(props.schedule.教科) ? (
     <AlreadyReservedButton {...props} />
   ) : (
     <ReserveButton {...props} />
   );
+};
