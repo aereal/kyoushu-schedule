@@ -89,7 +89,7 @@ func (s *DailySchedule) consume(columns []string) error {
 		return fmt.Errorf("invalid columns")
 	}
 	s.Date = columns[0]
-	for i, c := range columns[2 : len(columns)-1] {
+	for i, c := range columns[2:] {
 		if c == "" {
 			continue
 		}
