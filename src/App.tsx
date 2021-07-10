@@ -1,6 +1,10 @@
 import React, { FC, useState } from "react";
 import { JigenDialog } from "./components/JigenDialog";
 import { SchedulesList } from "./components/SchedulesList";
+import {
+  ReservationsProvider,
+  useReservertionsState,
+} from "./repositories/reservations";
 import { ReservationSchedule } from "./types";
 import { newDefault履修済み教科, 履修済み教科Context } from "./履修済み教科";
 
@@ -10,6 +14,7 @@ const App: FC = () => {
   const [selectedSchedule, setSelectedSchedule] = useState<
     ReservationSchedule | undefined
   >();
+  const [reservations, setReservations] = useReservertionsState();
   const onCloseDialog = (): void => {
     setDialogOpened(false);
   };
@@ -32,15 +37,32 @@ const App: FC = () => {
     }
     set履修済み教科(new Map(履修済み教科.entries()));
   };
+  const onCheckReservation = () => {
+    if (selectedSchedule === undefined) {
+      return;
+    }
+    if (reservations.has(selectedSchedule.教科)) {
+      reservations.delete(selectedSchedule.教科);
+    } else {
+      reservations.set(selectedSchedule.教科, {
+        date: selectedSchedule.date,
+        時限: selectedSchedule.時限,
+      });
+    }
+    setReservations(new Map(reservations.entries()));
+  };
   return (
     <履修済み教科Context.Provider value={履修済み教科}>
-      <SchedulesList onClickJigenButton={onClickJigenButton} />
-      <JigenDialog
-        open={dialogIsOpened}
-        onClose={onCloseDialog}
-        schedule={selectedSchedule}
-        onCheck履修={onCheck履修}
-      />
+      <ReservationsProvider value={reservations}>
+        <SchedulesList onClickJigenButton={onClickJigenButton} />
+        <JigenDialog
+          open={dialogIsOpened}
+          onClose={onCloseDialog}
+          schedule={selectedSchedule}
+          onCheck履修={onCheck履修}
+          onCheckReservation={onCheckReservation}
+        />
+      </ReservationsProvider>
     </履修済み教科Context.Provider>
   );
 };
