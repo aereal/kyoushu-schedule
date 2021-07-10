@@ -1,5 +1,4 @@
 import {
-  Button,
   Paper,
   Table,
   TableBody,
@@ -10,10 +9,14 @@ import {
 } from "@material-ui/core";
 import React, { FC } from "react";
 import currentSchedules from "../schedules.json";
-import { Schedule, 時限一覧 } from "../types";
+import { 教科, 時限一覧 } from "../types";
+import {
+  OpenReservationButton,
+  OpenReservationButtonProps,
+} from "./OpenReservationButton";
 
 interface SchedulesListProps {
-  readonly onClickJigenButton: (schedule: Schedule) => void;
+  readonly onClickJigenButton: OpenReservationButtonProps["onClick"];
 }
 
 export const SchedulesList: FC<SchedulesListProps> = ({
@@ -35,20 +38,19 @@ export const SchedulesList: FC<SchedulesListProps> = ({
             <TableCell component="th" scope="row">
               {ds.Date}
             </TableCell>
-            {ds.Schedules.map((kyouka, idx) => (
+            {(ds.Schedules as (教科 | 0)[]).map((kyouka, idx) => (
               <TableCell>
                 {kyouka === 0 ? (
                   ""
                 ) : (
-                  <Button
-                    onClick={onClickJigenButton.bind(null, {
+                  <OpenReservationButton
+                    onClick={onClickJigenButton}
+                    schedule={{
                       date: ds.Date,
                       時限: idx + 1,
                       教科: kyouka,
-                    })}
-                  >
-                    {kyouka}
-                  </Button>
+                    }}
+                  />
                 )}
               </TableCell>
             ))}
