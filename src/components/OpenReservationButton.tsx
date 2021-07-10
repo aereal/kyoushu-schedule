@@ -7,7 +7,6 @@ import { use履修済み教科 } from "../履修済み教科";
 
 const useStyles = makeStyles((theme) => ({
   reserved: {
-    backgroundColor: theme.palette.grey[100],
     color: theme.palette.text.disabled,
   },
 }));
@@ -16,7 +15,7 @@ const renderButtonProps = (args: {
   readonly 履修済み: boolean;
   readonly classes: ReturnType<typeof useStyles>;
 }): ButtonProps =>
-  args.履修済み ? { className: args.classes.reserved } : { color: "primary" };
+  args.履修済み ? { className: args.classes.reserved } : { color: "default" };
 
 const ButtonIcon: FC<{ readonly 履修済み: boolean }> = ({ 履修済み }) =>
   履修済み ? <CheckIcon /> : <AddIcon />;
