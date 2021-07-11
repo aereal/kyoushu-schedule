@@ -88,6 +88,9 @@ export const Sidebar: FC = () => {
   const classes = useStyles();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const afterNavigation = (): void => {
+    setOpen(false);
+  };
   return (
     <>
       <AppBar
@@ -131,7 +134,7 @@ export const Sidebar: FC = () => {
           </IconButton>
         </div>
         <Divider />
-        <NavigationList />
+        <NavigationList afterNavigation={afterNavigation} />
       </Drawer>
     </>
   );

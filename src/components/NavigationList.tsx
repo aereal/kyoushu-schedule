@@ -6,12 +6,35 @@ import {
 } from "@material-ui/core";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import DashboardIcon from "@material-ui/icons/Dashboard";
-import React, { FC, ReactNode } from "react";
+import React, { FC, MouseEventHandler, ReactNode } from "react";
+import { preventDefaultLinkClickBehavior, Route } from "type-route";
 import { routes, useRoute } from "../router";
 
-const LinkListItem: FC<ListItemProps<"a", { button?: true }>> = (props) => (
-  <ListItem button component="a" {...props} />
-);
+interface LinkListItemProps extends ListItemProps<"a", { button?: true }> {
+  readonly route: Route<typeof routes>;
+  readonly afterNavigation: () => void;
+}
+
+const LinkListItem: FC<LinkListItemProps> = ({
+  route,
+  afterNavigation,
+  ...props
+}) => {
+  const handleClick: MouseEventHandler = (event) => {
+    preventDefaultLinkClickBehavior(event);
+    route.push();
+    afterNavigation();
+  };
+  return (
+    <ListItem
+      button
+      component="a"
+      href={route.href}
+      onClick={handleClick}
+      {...props}
+    />
+  );
+};
 
 type RouteKey = keyof typeof routes;
 
@@ -29,7 +52,13 @@ const navItemDefinitions: Record<
   },
 };
 
-export const NavigationList: FC = () => {
+interface NavigationListProps {
+  readonly afterNavigation: () => void;
+}
+
+export const NavigationList: FC<NavigationListProps> = ({
+  afterNavigation,
+}) => {
   const route = useRoute();
   const routeNames = Object.keys(routes) as (keyof typeof routes)[];
   return (
@@ -38,7 +67,8 @@ export const NavigationList: FC = () => {
         <LinkListItem
           key={name}
           selected={name === route.name}
-          {...routes[name]().link}
+          route={routes[name]()}
+          afterNavigation={afterNavigation}
         >
           <ListItemIcon>{navItemDefinitions[name].icon}</ListItemIcon>
           <ListItemText>{navItemDefinitions[name].text}</ListItemText>
