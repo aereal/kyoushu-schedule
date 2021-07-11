@@ -4,26 +4,37 @@ import {
   ReservationsProvider,
   useReservertionsState,
 } from "./repositories/reservations";
+import { RouteProvider, useRoute } from "./router";
 import { CustomThemeProvider } from "./theme";
 import { newDefault履修済み教科, 履修済み教科Context } from "./履修済み教科";
 
-const App: FC = () => {
+const Page: FC = () => {
   const [履修済み教科, set履修済み教科] = useState(newDefault履修済み教科());
   const [reservations, setReservations] = useReservertionsState();
+  const route = useRoute();
   return (
-    <CustomThemeProvider>
-      <履修済み教科Context.Provider value={履修済み教科}>
-        <ReservationsProvider value={reservations}>
+    <履修済み教科Context.Provider value={履修済み教科}>
+      <ReservationsProvider value={reservations}>
+        {route.name === "root" ? (
           <RootPage
+            route={route}
             reservations={reservations}
             setReservations={setReservations}
             履修済み教科={履修済み教科}
             set履修済み教科={set履修済み教科}
           />
-        </ReservationsProvider>
-      </履修済み教科Context.Provider>
-    </CustomThemeProvider>
+        ) : null}
+      </ReservationsProvider>
+    </履修済み教科Context.Provider>
   );
 };
+
+const App: FC = () => (
+  <CustomThemeProvider>
+    <RouteProvider>
+      <Page />
+    </RouteProvider>
+  </CustomThemeProvider>
+);
 
 export default App;

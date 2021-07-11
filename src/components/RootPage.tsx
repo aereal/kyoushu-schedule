@@ -1,10 +1,13 @@
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import { Route } from "type-route";
 import { Reservations } from "../repositories/reservations";
+import { routes } from "../router";
 import { ReservationSchedule, Schedule, 教科 } from "../types";
 import { JigenDialog } from "./JigenDialog";
 import { SchedulesList } from "./SchedulesList";
 
 interface RootPageProps {
+  readonly route: Route<typeof routes.root>;
   readonly 履修済み教科: Map<教科, Schedule>;
   readonly set履修済み教科: Dispatch<SetStateAction<Map<教科, Schedule>>>;
   readonly reservations: Reservations;
