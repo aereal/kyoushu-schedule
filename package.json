@@ -12,6 +12,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "clsx": "^1.1.1",
     "immer": "^9.0.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -33,13 +34,19 @@
     ],
     "overrides": [
       {
-        "files": ["*"],
-        "excludedFiles": ["immer.ts"],
+        "files": [
+          "*"
+        ],
+        "excludedFiles": [
+          "immer.ts"
+        ],
         "rules": {
           "no-restricted-imports": [
             "error",
             {
-              "paths": ["immer"]
+              "paths": [
+                "immer"
+              ]
             }
           ]
         }
