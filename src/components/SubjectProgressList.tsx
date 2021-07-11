@@ -4,12 +4,12 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
 } from "@material-ui/core";
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
 import { StudyProgress } from "../repositories/study-progress";
-import { 教科 } from "../types";
+import { Schedule, 教科 } from "../types";
 
 const renderProps = (
   progress: StudyProgress
@@ -23,6 +23,11 @@ const renderProps = (
 interface SubjectProgressListProps {
   readonly subjects: readonly 教科[];
 }
+
+const format = (reservationSchedule: Schedule | undefined): string =>
+  reservationSchedule === undefined
+    ? ""
+    : ` (${reservationSchedule.date} ${reservationSchedule.時限}時限目)`;
 
 export const SubjectProgressList: FC<SubjectProgressListProps> = ({
   subjects,
@@ -40,7 +45,10 @@ export const SubjectProgressList: FC<SubjectProgressListProps> = ({
               {...renderProps(studyProgressRepo.getProgress(教科))}
             />
           </ListItemIcon>
-          <ListItemText>{教科}</ListItemText>
+          <ListItemText>
+            {教科}
+            {format(studyProgressRepo.getProgress(教科).reservation)}
+          </ListItemText>
         </ListItem>
       ))}
     </List>
