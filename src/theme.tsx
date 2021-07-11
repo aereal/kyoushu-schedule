@@ -41,82 +41,82 @@ const customTheme = createTheme({
   palette: {
     subjects: {
       1: {
-        main: hues[0],
+        main: hues[0]!,
       },
       2: {
-        main: hues[1],
+        main: hues[1]!,
       },
       3: {
-        main: hues[2],
+        main: hues[2]!,
       },
       4: {
-        main: hues[3],
+        main: hues[3]!,
       },
       5: {
-        main: hues[4],
+        main: hues[4]!,
       },
       6: {
-        main: hues[5],
+        main: hues[5]!,
       },
       7: {
-        main: hues[6],
+        main: hues[6]!,
       },
       8: {
-        main: hues[7],
+        main: hues[7]!,
       },
       9: {
-        main: hues[8],
+        main: hues[8]!,
       },
       10: {
-        main: hues[9],
+        main: hues[9]!,
       },
       11: {
-        main: hues[10],
+        main: hues[10]!,
       },
       12: {
-        main: hues[11],
+        main: hues[11]!,
       },
       13: {
-        main: hues[12],
+        main: hues[12]!,
       },
       14: {
-        main: hues[13],
+        main: hues[13]!,
       },
       15: {
-        main: hues[14],
+        main: hues[14]!,
       },
       16: {
-        main: hues[15],
+        main: hues[15]!,
       },
       17: {
-        main: hues[16],
+        main: hues[16]!,
       },
       18: {
-        main: hues[17],
+        main: hues[17]!,
       },
       19: {
-        main: hues[18],
+        main: hues[18]!,
       },
       20: {
-        main: hues[19],
+        main: hues[19]!,
       },
       21: {
-        main: hues[20],
+        main: hues[20]!,
       },
       22: {
-        main: hues[21],
+        main: hues[21]!,
       },
       23: {
-        main: hues[22],
+        main: hues[22]!,
       },
       24: {
-        main: hues[23],
+        main: hues[23]!,
       },
       25: {
-        main: hues[24],
+        main: hues[24]!,
       },
       26: {
-        main: hues[25],
+        main: hues[25]!,
       },
     },
   },
