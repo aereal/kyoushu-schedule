@@ -9,7 +9,7 @@ import { RouteProvider, useRoute } from "./router";
 import { CustomThemeProvider } from "./theme";
 import { 教科 } from "./types";
 
-const 一覧: 教科[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const 一覧: 教科[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 const Page: FC = () => {
   const [progressRepo, setProgressRepo] = useState(
