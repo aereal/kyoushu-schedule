@@ -89,7 +89,7 @@ interface StudyProgressArgs {
   readonly taken?: Schedule;
 }
 
-class StudyProgress {
+export class StudyProgress {
   public readonly subject: 教科;
   public readonly reservation: Schedule | undefined;
   public readonly taken: Schedule | undefined;
