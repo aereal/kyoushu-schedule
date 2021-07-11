@@ -30,6 +30,20 @@
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "overrides": [
+      {
+        "files": ["*"],
+        "excludedFiles": ["immer.ts"],
+        "rules": {
+          "no-restricted-imports": [
+            "error",
+            {
+              "paths": ["immer"]
+            }
+          ]
+        }
+      }
     ]
   },
   "browserslist": {
