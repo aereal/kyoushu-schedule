@@ -25,7 +25,9 @@ const Page: FC = () => {
             set履修済み教科={set履修済み教科}
           />
         ) : null}
-        {route.name === "progress" ? <ProgressPage route={route} /> : null}
+        {route.name === "progress" ? (
+          <ProgressPage route={route} takenSubjects={履修済み教科} />
+        ) : null}
       </ReservationsProvider>
     </履修済み教科Context.Provider>
   );
