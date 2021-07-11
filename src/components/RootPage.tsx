@@ -1,6 +1,7 @@
 import { Button } from "@material-ui/core";
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import { Route } from "type-route";
+import { produce } from "../immer";
 import { Reservations } from "../repositories/reservations";
 import { routes } from "../router";
 import { ReservationSchedule, Schedule, 教科 } from "../types";
@@ -36,30 +37,36 @@ export const RootPage: FC<RootPageProps> = ({
     if (selectedSchedule === undefined) {
       return;
     }
-    if (履修済み教科.has(selectedSchedule.教科)) {
-      履修済み教科.delete(selectedSchedule.教科);
-    } else {
-      const schedule = {
-        date: selectedSchedule.date,
-        時限: selectedSchedule.時限,
-      };
-      履修済み教科.set(selectedSchedule.教科, schedule);
-    }
-    set履修済み教科(new Map(履修済み教科.entries()));
+    set履修済み教科(
+      produce(履修済み教科, (draft) => {
+        if (draft.has(selectedSchedule.教科)) {
+          draft.delete(selectedSchedule.教科);
+        } else {
+          const schedule = {
+            date: selectedSchedule.date,
+            時限: selectedSchedule.時限,
+          };
+          draft.set(selectedSchedule.教科, schedule);
+        }
+      })
+    );
   };
   const onCheckReservation = () => {
     if (selectedSchedule === undefined) {
       return;
     }
-    if (reservations.has(selectedSchedule.教科)) {
-      reservations.delete(selectedSchedule.教科);
-    } else {
-      reservations.set(selectedSchedule.教科, {
-        date: selectedSchedule.date,
-        時限: selectedSchedule.時限,
-      });
-    }
-    setReservations(new Map(reservations.entries()));
+    setReservations(
+      produce(reservations, (draft) => {
+        if (draft.has(selectedSchedule.教科)) {
+          draft.delete(selectedSchedule.教科);
+        } else {
+          draft.set(selectedSchedule.教科, {
+            date: selectedSchedule.date,
+            時限: selectedSchedule.時限,
+          });
+        }
+      })
+    );
   };
   return (
     <>
