@@ -6,9 +6,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@material-ui/core";
-import React, { FC } from "react";
+import { periodTimeRange } from "../period";
 import currentSchedules from "../schedules.json";
+import { formatTerm } from "../term";
 import { 教科, 時限, 時限一覧 } from "../types";
 import {
   OpenReservationButton,
@@ -28,7 +30,12 @@ export const SchedulesList: FC<SchedulesListProps> = ({
         <TableRow>
           <TableCell>日付</TableCell>
           {時限一覧.map((時限) => (
-            <TableCell key={時限}>{時限}</TableCell>
+            <TableCell key={時限}>
+              {時限}時限
+              <Typography variant="body2">
+                {formatTerm(periodTimeRange[時限])}
+              </Typography>
+            </TableCell>
           ))}
         </TableRow>
       </TableHead>

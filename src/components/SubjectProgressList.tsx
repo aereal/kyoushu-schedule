@@ -8,7 +8,9 @@ import {
 } from "@material-ui/core";
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
+import { periodTimeRange } from "../period";
 import { StudyProgress } from "../repositories/study-progress";
+import { formatTerm } from "../term";
 import { Schedule, 教科 } from "../types";
 
 const renderProps = (
@@ -27,7 +29,9 @@ interface SubjectProgressListProps {
 const format = (reservationSchedule: Schedule | undefined): string =>
   reservationSchedule === undefined
     ? ""
-    : ` (${reservationSchedule.date} ${reservationSchedule.時限}時限目)`;
+    : ` (${reservationSchedule.date} ${
+        reservationSchedule.時限
+      }時限目 ${formatTerm(periodTimeRange[reservationSchedule.時限])})`;
 
 export const SubjectProgressList: FC<SubjectProgressListProps> = ({
   subjects,
