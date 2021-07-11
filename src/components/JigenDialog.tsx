@@ -7,9 +7,8 @@ import {
   FormControlLabel,
 } from "@material-ui/core";
 import React, { FC } from "react";
-import { useReservations } from "../repositories/reservations";
+import { useStudyProgressRepository } from "../contexts/study-progress-repo";
 import { ReservationSchedule, Schedule } from "../types";
-import { use履修済み教科 } from "../履修済み教科";
 
 const eqSchedule = (a: Schedule, b: Schedule): boolean =>
   a.date === b.date && a.時限 === b.時限;
@@ -26,17 +25,16 @@ const renderCheckboxState = (
 
 interface ReservationCheckboxProps {
   readonly selectedSchedule: ReservationSchedule;
-  readonly 履修済み: boolean;
   readonly onCheckReservation: () => void;
 }
 
 const ReservationCheckbox: FC<ReservationCheckboxProps> = ({
-  履修済み,
   onCheckReservation,
   selectedSchedule,
 }) => {
-  const reservations = useReservations();
-  const reservedSchedule = reservations.get(selectedSchedule.教科);
+  const repo = useStudyProgressRepository();
+  const progress = repo.getProgress(selectedSchedule.教科);
+  const reservedSchedule = progress.reservation;
 
   return (
     <FormControlLabel
@@ -44,7 +42,7 @@ const ReservationCheckbox: FC<ReservationCheckboxProps> = ({
         <Checkbox
           color="default"
           onChange={onCheckReservation}
-          disabled={履修済み}
+          disabled={progress.hasTaken}
           {...renderCheckboxState(selectedSchedule, reservedSchedule)}
         />
       }
@@ -66,7 +64,8 @@ const JigenDialogContent: FC<JigenDialogContentProps> = ({
   onCheck履修,
   onCheckReservation,
 }) => {
-  const 履修済み教科 = use履修済み教科();
+  const repo = useStudyProgressRepository();
+  const progress = repo.getProgress(schedule.教科);
   return (
     <>
       <DialogTitle>履修状況: 教科{schedule.教科}</DialogTitle>
@@ -74,7 +73,7 @@ const JigenDialogContent: FC<JigenDialogContentProps> = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={履修済み教科.has(schedule.教科)}
+              checked={progress.hasTaken}
               color="default"
               onChange={onCheck履修}
             />
@@ -84,7 +83,6 @@ const JigenDialogContent: FC<JigenDialogContentProps> = ({
         <ReservationCheckbox
           onCheckReservation={onCheckReservation}
           selectedSchedule={schedule}
-          履修済み={履修済み教科.has(schedule.教科)}
         />
       </DialogContent>
     </>

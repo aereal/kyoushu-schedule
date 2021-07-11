@@ -4,12 +4,16 @@ import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import CheckIcon from "@material-ui/icons/Check";
 import { StyleRules } from "@material-ui/styles/withStyles";
 import React, { FC } from "react";
-import { useReservations } from "../repositories/reservations";
+import { useStudyProgressRepository } from "../contexts/study-progress-repo";
+import {
+  progressNotTaken,
+  progressReserved,
+  progressTaken,
+} from "../repositories/study-progress";
 import "../theme";
 import { ReservationSchedule, 教科, 教科一覧 } from "../types";
-import { use履修済み教科 } from "../履修済み教科";
 
-type SubjectColorClass = `subject${教科}`;
+type SubjectColorClass = `subject${教科}-not-taken`;
 type ReservedSubjectColorClass = `subject${教科}-reserved`;
 type TakenSubjectColorClass = `subject${教科}-taken`;
 
@@ -55,20 +59,22 @@ export const OpenReservationButton: FC<OpenReservationButtonProps> = ({
   schedule,
   onClick,
 }) => {
-  const 履修済み教科 = use履修済み教科();
-  const reservations = useReservations();
+  const repo = useStudyProgressRepository();
   const classes = useStyles();
-  const 履修済み = 履修済み教科.has(schedule.教科);
-  const 予約済み = reservations.has(schedule.教科);
-  const klass = 履修済み
-    ? (`subject${schedule.教科}-taken` as TakenSubjectColorClass)
-    : 予約済み
-    ? (`subject${schedule.教科}-reserved` as ReservedSubjectColorClass)
-    : (`subject${schedule.教科}` as SubjectColorClass);
+  const { 教科 } = schedule;
+  const progress = repo.getProgress(教科);
+  const klass = {
+    [progressNotTaken]: `subject${教科}` as SubjectColorClass,
+    [progressTaken]: `subject${教科}-taken` as TakenSubjectColorClass,
+    [progressReserved]: `subject${教科}-reserved` as ReservedSubjectColorClass,
+  }[progress.progressState];
   return (
     <Button onClick={onClick.bind(null, schedule)} className={classes[klass]}>
-      <ButtonIcon 履修済み={履修済み} 予約済み={予約済み} />
-      {schedule.教科}
+      <ButtonIcon
+        履修済み={progress.hasTaken}
+        予約済み={progress.hasReserved}
+      />
+      {教科}
     </Button>
   );
 };

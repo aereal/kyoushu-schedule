@@ -15,8 +15,10 @@ export const 第二段階教科一覧 = [
 ] as const;
 export const 教科一覧 = [...第一段階教科一覧, ...第二段階教科一覧] as const;
 
-type 第一段階教科 = typeof 第一段階教科一覧[number];
+export type 第一段階教科 = typeof 第一段階教科一覧[number];
 
-type 第二段階教科 = typeof 第二段階教科一覧[number];
+export type 第二段階教科 = typeof 第二段階教科一覧[number];
 
 export type 教科 = 第一段階教科 | 第二段階教科;
+
+export const is第一段階 = (x: 教科): x is 第一段階教科 => x >= 1 && x <= 10;

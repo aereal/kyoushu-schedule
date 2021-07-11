@@ -1,35 +1,29 @@
 import React, { FC, useState } from "react";
 import { ProgressPage } from "./components/ProgressPage";
 import { RootPage } from "./components/RootPage";
-import {
-  ReservationsProvider,
-  useReservertionsState,
-} from "./repositories/reservations";
+import { StudyProgressRepositoryProvider } from "./contexts/study-progress-repo";
+import { StudyProgressRepository } from "./repositories/study-progress";
 import { RouteProvider, useRoute } from "./router";
 import { CustomThemeProvider } from "./theme";
-import { newDefault履修済み教科, 履修済み教科Context } from "./履修済み教科";
+import { 教科 } from "./types";
+
+const 一覧: 教科[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const Page: FC = () => {
-  const [履修済み教科, set履修済み教科] = useState(newDefault履修済み教科());
-  const [reservations, setReservations] = useReservertionsState();
+  const [progressRepo, setProgressRepo] = useState(
+    一覧.reduce(
+      (repo, subject) => repo.take(subject, { date: "2021/2/22", 時限: 1 }),
+      new StudyProgressRepository()
+    )
+  );
   const route = useRoute();
   return (
-    <履修済み教科Context.Provider value={履修済み教科}>
-      <ReservationsProvider value={reservations}>
-        {route.name === "root" ? (
-          <RootPage
-            route={route}
-            reservations={reservations}
-            setReservations={setReservations}
-            履修済み教科={履修済み教科}
-            set履修済み教科={set履修済み教科}
-          />
-        ) : null}
-        {route.name === "progress" ? (
-          <ProgressPage route={route} takenSubjects={履修済み教科} />
-        ) : null}
-      </ReservationsProvider>
-    </履修済み教科Context.Provider>
+    <StudyProgressRepositoryProvider value={progressRepo}>
+      {route.name === "root" ? (
+        <RootPage route={route} setStudyProgressRepo={setProgressRepo} />
+      ) : null}
+      {route.name === "progress" ? <ProgressPage route={route} /> : null}
+    </StudyProgressRepositoryProvider>
   );
 };
 

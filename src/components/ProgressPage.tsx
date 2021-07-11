@@ -1,28 +1,33 @@
 import { Grid, Typography } from "@material-ui/core";
 import React, { FC } from "react";
 import { Route } from "type-route";
-import { produce } from "../immer";
+import { useStudyProgressRepository } from "../contexts/study-progress-repo";
 import { routes } from "../router";
-import { Schedule, 教科, 第一段階教科一覧, 第二段階教科一覧 } from "../types";
+import {
+  is第一段階,
+  第一段階教科,
+  第一段階教科一覧,
+  第二段階教科,
+  第二段階教科一覧,
+} from "../types";
 import { SubjectProgressList } from "./SubjectProgressList";
 import { TakenSubjectsProgress } from "./TakenSubjectsProgress";
 
 interface ProgressPageProps {
   readonly route: Route<typeof routes.progress>;
-  readonly takenSubjects: Map<教科, Schedule>;
 }
 
-export const ProgressPage: FC<ProgressPageProps> = ({ takenSubjects }) => {
-  const earlierTakenSubjects = produce(takenSubjects, (draft) => {
-    for (const subject of 第二段階教科一覧) {
-      draft.delete(subject);
-    }
-  });
-  const laterTakenSubjects = produce(takenSubjects, (draft) => {
-    for (const subject of 第一段階教科一覧) {
-      draft.delete(subject);
-    }
-  });
+export const ProgressPage: FC<ProgressPageProps> = () => {
+  const studyProgressRepo = useStudyProgressRepository();
+  const [earlier, later] = studyProgressRepo
+    .getTakenSubjects()
+    .reduce<[第一段階教科[], 第二段階教科[]]>(
+      ([a, b], subject) =>
+        is第一段階(subject)
+          ? ([[...a, subject], b] as [第一段階教科[], 第二段階教科[]])
+          : ([a, [...b, subject]] as [第一段階教科[], 第二段階教科[]]),
+      [[], []]
+    );
   return (
     <>
       <Typography variant="h4">履修状況</Typography>
@@ -31,23 +36,17 @@ export const ProgressPage: FC<ProgressPageProps> = ({ takenSubjects }) => {
           <Typography variant="h5">第壱段階</Typography>
           <TakenSubjectsProgress
             allSubjectsCount={第一段階教科一覧.length}
-            takenSubjectsCount={earlierTakenSubjects.size}
+            takenSubjectsCount={earlier.length}
           />
-          <SubjectProgressList
-            subjects={第一段階教科一覧}
-            takenSubjects={earlierTakenSubjects}
-          />
+          <SubjectProgressList subjects={第一段階教科一覧} />
         </Grid>
         <Grid item md={6}>
           <Typography variant="h5">第弐段階</Typography>
           <TakenSubjectsProgress
             allSubjectsCount={第二段階教科一覧.length}
-            takenSubjectsCount={laterTakenSubjects.size}
+            takenSubjectsCount={later.length}
           />
-          <SubjectProgressList
-            subjects={第二段階教科一覧}
-            takenSubjects={laterTakenSubjects}
-          />
+          <SubjectProgressList subjects={第二段階教科一覧} />
         </Grid>
       </Grid>
     </>

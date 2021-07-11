@@ -1,27 +1,20 @@
 import { Button } from "@material-ui/core";
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import { Route } from "type-route";
-import { produce } from "../immer";
-import { Reservations } from "../repositories/reservations";
+import { StudyProgressRepository } from "../repositories/study-progress";
 import { routes } from "../router";
-import { ReservationSchedule, Schedule, 教科 } from "../types";
+import { ReservationSchedule } from "../types";
 import { JigenDialog } from "./JigenDialog";
 import { SchedulesList } from "./SchedulesList";
 
 interface RootPageProps {
   readonly route: Route<typeof routes.root>;
-  readonly 履修済み教科: Map<教科, Schedule>;
-  readonly set履修済み教科: Dispatch<SetStateAction<Map<教科, Schedule>>>;
-  readonly reservations: Reservations;
-  readonly setReservations: Dispatch<SetStateAction<Reservations>>;
+  readonly setStudyProgressRepo: Dispatch<
+    SetStateAction<StudyProgressRepository>
+  >;
 }
 
-export const RootPage: FC<RootPageProps> = ({
-  履修済み教科,
-  set履修済み教科,
-  reservations,
-  setReservations,
-}) => {
+export const RootPage: FC<RootPageProps> = ({ setStudyProgressRepo }) => {
   const [dialogIsOpened, setDialogOpened] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState<
     ReservationSchedule | undefined
@@ -37,36 +30,23 @@ export const RootPage: FC<RootPageProps> = ({
     if (selectedSchedule === undefined) {
       return;
     }
-    set履修済み教科(
-      produce(履修済み教科, (draft) => {
-        if (draft.has(selectedSchedule.教科)) {
-          draft.delete(selectedSchedule.教科);
-        } else {
-          const schedule = {
-            date: selectedSchedule.date,
-            時限: selectedSchedule.時限,
-          };
-          draft.set(selectedSchedule.教科, schedule);
-        }
-      })
-    );
+    setStudyProgressRepo((repo) => {
+      const { 教科, ...schedule } = selectedSchedule;
+      const progress = repo.getProgress(教科);
+      return progress.hasTaken ? repo.untake(教科) : repo.take(教科, schedule);
+    });
   };
   const onCheckReservation = () => {
     if (selectedSchedule === undefined) {
       return;
     }
-    setReservations(
-      produce(reservations, (draft) => {
-        if (draft.has(selectedSchedule.教科)) {
-          draft.delete(selectedSchedule.教科);
-        } else {
-          draft.set(selectedSchedule.教科, {
-            date: selectedSchedule.date,
-            時限: selectedSchedule.時限,
-          });
-        }
-      })
-    );
+    setStudyProgressRepo((repo) => {
+      const { 教科, ...schedule } = selectedSchedule;
+      const progress = repo.getProgress(教科);
+      return progress.hasReserved
+        ? repo.releaseReservation(教科)
+        : repo.reserve(教科, schedule);
+    });
   };
   return (
     <>
