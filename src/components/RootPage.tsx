@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import { Route } from "type-route";
 import { Reservations } from "../repositories/reservations";
@@ -62,6 +63,7 @@ export const RootPage: FC<RootPageProps> = ({
   };
   return (
     <>
+      <Button {...routes.progress().link}>Show progress</Button>
       <SchedulesList onClickJigenButton={onClickJigenButton} />
       <JigenDialog
         open={dialogIsOpened}

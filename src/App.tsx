@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import { ProgressPage } from "./components/ProgressPage";
 import { RootPage } from "./components/RootPage";
 import {
   ReservationsProvider,
@@ -24,6 +25,7 @@ const Page: FC = () => {
             set履修済み教科={set履修済み教科}
           />
         ) : null}
+        {route.name === "progress" ? <ProgressPage route={route} /> : null}
       </ReservationsProvider>
     </履修済み教科Context.Provider>
   );
