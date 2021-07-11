@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import React, { FC } from "react";
 import currentSchedules from "../schedules.json";
-import { 教科, 時限一覧 } from "../types";
+import { 教科, 時限, 時限一覧 } from "../types";
 import {
   OpenReservationButton,
   OpenReservationButtonProps,
@@ -47,7 +47,7 @@ export const SchedulesList: FC<SchedulesListProps> = ({
                     onClick={onClickJigenButton}
                     schedule={{
                       date: ds.Date,
-                      時限: idx + 1,
+                      時限: (idx + 1) as 時限,
                       教科: kyouka,
                     }}
                   />
