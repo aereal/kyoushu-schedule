@@ -1631,6 +1631,25 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@kvs/localstorage@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@kvs/localstorage/-/localstorage-1.2.0.tgz#787eaa516b6691b3b92db2a37b9faf10c59b34be"
+  integrity sha512-sQLMpXEhlUupifwkmdv6y2EMS/Y7HDOl1MdrXyKuD5pZm5p9vYL4PaPULFyD9gJ8vPcW8jzZWZwv9KAOTGLENA==
+  dependencies:
+    "@kvs/storage" "^1.2.0"
+
+"@kvs/storage@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@kvs/storage/-/storage-1.2.0.tgz#b9eaaed145dcba1a42891b2f418402b8b4a60d01"
+  integrity sha512-Zd9rA4U3/h8n3CxNUzMnsz5+UPOng1dXOc0MyEy0RQzF0XlWSTyOrxErn57bPbO0MHoHdw11MEzhDDRYsNj7ZA==
+  dependencies:
+    "@kvs/types" "^1.2.0"
+
+"@kvs/types@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@kvs/types/-/types-1.2.0.tgz#45e9e37865dff28a274145ea87857ec8e93515c6"
+  integrity sha512-88x1wFRMYg6DyCuX2jeLx2s8q7H3ayRtPD+OVhsSC5v7ek+FP7cv9ooVCC/+Ib5QzNWzkZpd4Uap6O9HrAxq6g==
+
 "@material-ui/core@^4.12.1":
   version "4.12.1"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.12.1.tgz#ac8f081498047aa02bb6ee70b77c5dad6a2a6e73"
