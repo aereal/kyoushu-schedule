@@ -78,7 +78,7 @@ export class StudyProgressRepository {
 
   private *entries(): Generator<[教科, StudyProgress], void, unknown> {
     for (const [k, v] of Object.entries(this.map)) {
-      yield [k as unknown as 教科, v];
+      yield [parseInt(k) as 教科, v];
     }
   }
 }
