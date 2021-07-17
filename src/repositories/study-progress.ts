@@ -21,17 +21,21 @@ const buildMap = (subjects: readonly 教科[]): StudyProgressMap =>
     {} as StudyProgressMap
   );
 
+interface StudyProgressRepositoryOptions {
+  readonly map?: StudyProgressMap;
+}
+
 export class StudyProgressRepository {
   private readonly map: StudyProgressMap;
 
-  constructor(map?: StudyProgressMap) {
-    this.map = map ?? buildMap(教科一覧);
+  constructor(options?: StudyProgressRepositoryOptions) {
+    this.map = options?.map ?? buildMap(教科一覧);
   }
 
   private updated(
     recipe: (state: Draft<StudyProgressMap>) => void
   ): StudyProgressRepository {
-    return new StudyProgressRepository(produce(this.map, recipe));
+    return new StudyProgressRepository({ map: produce(this.map, recipe) });
   }
 
   public reserve(subject: 教科, schedule: Schedule): StudyProgressRepository {
