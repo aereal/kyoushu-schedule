@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
-import { formatShortDate } from "../date";
+import { formatShortDate, isPast } from "../date";
 import { ReservationSchedule, Schedule } from "../types";
 import { DateTime } from "./DateTime";
 
@@ -44,7 +44,7 @@ const ReservationCheckbox: FC<ReservationCheckboxProps> = ({
         <Checkbox
           color="default"
           onChange={onCheckReservation}
-          disabled={progress.hasTaken}
+          disabled={isPast(selectedSchedule.date) || progress.hasTaken}
           {...renderCheckboxState(selectedSchedule, reservedSchedule)}
         />
       }
