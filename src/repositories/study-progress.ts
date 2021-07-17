@@ -28,7 +28,9 @@ interface StudyProgressRepositoryOptions {
 export class StudyProgressRepository {
   private readonly map: StudyProgressMap;
 
-  constructor(options?: StudyProgressRepositoryOptions) {
+  static create = (): StudyProgressRepository => new StudyProgressRepository();
+
+  protected constructor(options?: StudyProgressRepositoryOptions) {
     this.map = options?.map ?? buildMap(教科一覧);
   }
 

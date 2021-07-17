@@ -2,7 +2,7 @@ import React, { createContext, FC, useContext } from "react";
 import { StudyProgressRepository } from "../repositories/study-progress";
 
 const StudyProgressRepositoryContext = createContext(
-  new StudyProgressRepository()
+  StudyProgressRepository.create()
 );
 
 export const StudyProgressRepositoryProvider: FC<{

@@ -1,7 +1,12 @@
 import { StudyProgressRepository } from "./study-progress";
+
+class TestRepository extends StudyProgressRepository {
+  static forTest = () => new TestRepository();
+}
+
 describe("StudyProgressRepository", () => {
   test("reserve", () => {
-    let repo = new StudyProgressRepository();
+    let repo = TestRepository.forTest();
     (() => {
       const got = repo.getProgress(1);
       expect(got.hasTaken).toBe(false);
@@ -43,7 +48,7 @@ describe("StudyProgressRepository", () => {
   });
 
   test("take/untake", () => {
-    let repo = new StudyProgressRepository();
+    let repo = TestRepository.forTest();
     (() => {
       expect(repo.hasTaken(1)).toBe(false);
       const got = repo.getProgress(1);
