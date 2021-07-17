@@ -1,4 +1,9 @@
+import type { KVSOptions } from "@kvs/types";
 import { Draft, produce } from "../immer";
+import {
+  createLocalStorageProvider,
+  StorageProvider,
+} from "../infra/storage-provider";
 import { Schedule, 教科, 教科一覧 } from "../types";
 
 export const studyProgressStates = ["not-taken", "reserved", "taken"] as const;
@@ -29,23 +34,47 @@ const buildMap = (subjects: readonly 教科[]): StudyProgressMap =>
     {} as StudyProgressMap
   );
 
+type Serialization = Readonly<
+  {
+    [P in 教科]: StudyProgressArgs;
+  }
+>;
+
+export type Schema = {
+  state: string;
+};
+
+const kvsOptions: KVSOptions<Schema> = {
+  name: "state",
+  version: 1,
+};
+
 interface StudyProgressRepositoryOptions {
   readonly map?: StudyProgressMap;
+  readonly storageProvider: StorageProvider<Schema>;
 }
 
 export class StudyProgressRepository {
   private readonly map: StudyProgressMap;
+  private readonly storageProvider: StorageProvider<Schema>;
 
-  static create = (): StudyProgressRepository => new StudyProgressRepository();
+  static getInstance = (): StudyProgressRepository =>
+    new StudyProgressRepository({
+      storageProvider: createLocalStorageProvider(),
+    });
 
-  protected constructor(options?: StudyProgressRepositoryOptions) {
+  protected constructor(options: StudyProgressRepositoryOptions) {
     this.map = options?.map ?? buildMap(教科一覧);
+    this.storageProvider = options?.storageProvider;
   }
 
   private updated(
     recipe: (state: Draft<StudyProgressMap>) => void
   ): StudyProgressRepository {
-    return new StudyProgressRepository({ map: produce(this.map, recipe) });
+    return new StudyProgressRepository({
+      map: produce(this.map, recipe),
+      storageProvider: this.storageProvider,
+    });
   }
 
   public reserve(subject: 教科, schedule: Schedule): StudyProgressRepository {
@@ -90,6 +119,45 @@ export class StudyProgressRepository {
     return ret;
   }
 
+  public async hydrate(): Promise<
+    [updated: StudyProgressRepository, hydrated: boolean]
+  > {
+    const storage = await this.storageProvider(kvsOptions);
+    const got = await storage.get("state");
+    if (got === undefined) {
+      return [this, false];
+    }
+    const parsed = JSON.parse(got) as Serialization;
+    return [
+      new StudyProgressRepository({
+        storageProvider: this.storageProvider,
+        map: 教科一覧.reduce(
+          (map, subject) => ({
+            ...map,
+            [subject]: StudyProgress.hydrate(parsed[subject]),
+          }),
+          {} as StudyProgressMap
+        ),
+      }),
+      true,
+    ];
+  }
+
+  public async persist(): Promise<void> {
+    const storage = await this.storageProvider(kvsOptions);
+    await storage.set("state", JSON.stringify(this.serializeState()));
+  }
+
+  private serializeState(): Serialization {
+    return Array.from(mapKeys(this.map)).reduce(
+      (a, b) => ({
+        ...a,
+        [b]: this.map[b].toJSON(),
+      }),
+      {} as Serialization
+    );
+  }
+
   private *entries(): Generator<[教科, StudyProgress], void, unknown> {
     for (const a of mapKeys(this.map)) {
       yield [a, this.map[a]];
@@ -109,6 +177,9 @@ export class StudyProgress {
   public readonly taken: Schedule | undefined;
 
   static of = (subject: 教科): StudyProgress => new StudyProgress({ subject });
+
+  static hydrate = (serialized: StudyProgressArgs): StudyProgress =>
+    new StudyProgress(serialized);
 
   private constructor(args: StudyProgressArgs) {
     this.subject = args.subject;
@@ -158,7 +229,7 @@ export class StudyProgress {
     return this.updated(this.reservation, undefined);
   }
 
-  public toJSON(): unknown {
+  public toJSON(): StudyProgressArgs {
     return {
       subject: this.subject,
       reservation: this.reservation,

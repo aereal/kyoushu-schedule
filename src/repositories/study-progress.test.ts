@@ -1,12 +1,48 @@
-import { StudyProgressRepository } from "./study-progress";
+import { kvsMemoryStorage, KvsMemoryStorage } from "@kvs/memorystorage";
+import { Schema, StudyProgressRepository } from "./study-progress";
 
 class TestRepository extends StudyProgressRepository {
-  static forTest = () => new TestRepository();
+  static forTest = async (): Promise<
+    [TestRepository, KvsMemoryStorage<Schema>]
+  > => {
+    const storage = await kvsMemoryStorage<Schema>({
+      name: "state",
+      version: 1,
+    });
+    return [
+      new TestRepository({ storageProvider: async () => storage }),
+      storage,
+    ];
+  };
+
+  static withStorage = (storage: KvsMemoryStorage<Schema>): TestRepository =>
+    new TestRepository({ storageProvider: async () => storage });
 }
 
 describe("StudyProgressRepository", () => {
-  test("reserve", () => {
-    let repo = TestRepository.forTest();
+  test("persist/hydrate", async () => {
+    const pair = await TestRepository.forTest();
+    let repo = pair[0];
+    const storage = pair[1];
+    repo = repo.reserve(1, { date: "2021/1/1", 時限: 1 });
+    await repo.persist();
+    const [hydratedRepo, hydrated] = await TestRepository.withStorage(
+      storage
+    ).hydrate();
+    expect(hydrated).toBe(true);
+    const subject1 = hydratedRepo.getProgress(1);
+    expect(subject1.toJSON()).toStrictEqual({
+      subject: 1,
+      reservation: {
+        date: "2021/1/1",
+        時限: 1,
+      },
+      taken: undefined,
+    });
+  });
+
+  test("reserve", async () => {
+    let [repo] = await TestRepository.forTest();
     (() => {
       const got = repo.getProgress(1);
       expect(got.hasTaken).toBe(false);
@@ -47,8 +83,8 @@ describe("StudyProgressRepository", () => {
     })();
   });
 
-  test("take/untake", () => {
-    let repo = TestRepository.forTest();
+  test("take/untake", async () => {
+    let [repo] = await TestRepository.forTest();
     (() => {
       expect(repo.hasTaken(1)).toBe(false);
       const got = repo.getProgress(1);

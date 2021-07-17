@@ -1,5 +1,5 @@
 import { Container, CssBaseline } from "@material-ui/core";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { ProgressPage } from "./components/ProgressPage";
 import { RootPage } from "./components/RootPage";
 import { Sidebar, useStyles } from "./components/Sidebar";
@@ -10,8 +10,23 @@ import { CustomThemeProvider } from "./theme";
 
 const Page: FC = () => {
   const [progressRepo, setProgressRepo] = useState(
-    StudyProgressRepository.create()
+    StudyProgressRepository.getInstance()
   );
+  useEffect(() => {
+    const effect = async () => {
+      const [newRepo, hydrated] = await progressRepo.hydrate();
+      if (hydrated) {
+        setProgressRepo(newRepo);
+      }
+    };
+    effect();
+  }, []);
+  useEffect(() => {
+    const effect = async () => {
+      await progressRepo.persist();
+    };
+    effect();
+  }, [progressRepo]);
   const route = useRoute();
   const classes = useStyles();
   return (
