@@ -9,10 +9,25 @@ import {
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
 import { formatShortDate } from "../date";
+import { maybe } from "../maybe";
 import { periodTimeRange } from "../period";
 import { StudyProgress } from "../repositories/study-progress";
 import { formatTerm } from "../term";
 import { Schedule, 教科 } from "../types";
+import { DateTime } from "./DateTime";
+
+interface ReservationElementProps {
+  readonly schedule: Schedule;
+}
+
+const ReservationElement: FC<ReservationElementProps> = ({
+  schedule: { 時限, date },
+}) => (
+  <>
+    (<DateTime dateTime={date}>{formatShortDate(date)}</DateTime> {時限}時限目{" "}
+    {formatTerm(periodTimeRange[時限])})
+  </>
+);
 
 const renderProps = (
   progress: StudyProgress
@@ -26,13 +41,6 @@ const renderProps = (
 interface SubjectProgressListProps {
   readonly subjects: readonly 教科[];
 }
-
-const format = (reservationSchedule: Schedule | undefined): string =>
-  reservationSchedule === undefined
-    ? ""
-    : ` (${formatShortDate(reservationSchedule.date)} ${
-        reservationSchedule.時限
-      }時限目 ${formatTerm(periodTimeRange[reservationSchedule.時限])})`;
 
 export const SubjectProgressList: FC<SubjectProgressListProps> = ({
   subjects,
@@ -52,7 +60,12 @@ export const SubjectProgressList: FC<SubjectProgressListProps> = ({
           </ListItemIcon>
           <ListItemText>
             {教科}
-            {format(studyProgressRepo.getProgress(教科).reservation)}
+            {maybe(studyProgressRepo.getProgress(教科).reservation).fold(
+              (schedule) => (
+                <ReservationElement schedule={schedule} />
+              ),
+              () => null
+            )}
           </ListItemText>
         </ListItem>
       ))}
