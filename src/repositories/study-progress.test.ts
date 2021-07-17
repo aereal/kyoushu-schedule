@@ -1,4 +1,5 @@
 import { kvsMemoryStorage, KvsMemoryStorage } from "@kvs/memorystorage";
+import { formatDate, parseDate } from "../date";
 import { Schema, StudyProgressRepository } from "./study-progress";
 
 class TestRepository extends StudyProgressRepository {
@@ -24,7 +25,7 @@ describe("StudyProgressRepository", () => {
     const pair = await TestRepository.forTest();
     let repo = pair[0];
     const storage = pair[1];
-    repo = repo.reserve(1, { date: "2021/1/1", 時限: 1 });
+    repo = repo.reserve(1, { date: parseDate("2021-01-01"), 時限: 1 });
     await repo.persist();
     const [hydratedRepo, hydrated] = await TestRepository.withStorage(
       storage
@@ -34,7 +35,7 @@ describe("StudyProgressRepository", () => {
     expect(subject1.toJSON()).toStrictEqual({
       subject: 1,
       reservation: {
-        date: "2021/1/1",
+        date: formatDate(parseDate("2021-01-01")),
         時限: 1,
       },
       taken: undefined,
@@ -54,7 +55,7 @@ describe("StudyProgressRepository", () => {
       });
       expect(repo.getTakenSubjects()).toStrictEqual([]);
     })();
-    repo = repo.reserve(1, { date: "2021/1/1", 時限: 1 });
+    repo = repo.reserve(1, { date: parseDate("2021-01-01"), 時限: 1 });
     (() => {
       const got = repo.getProgress(1);
       expect(got.hasTaken).toBe(false);
@@ -62,7 +63,7 @@ describe("StudyProgressRepository", () => {
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
         reservation: {
-          date: "2021/1/1",
+          date: formatDate(parseDate("2021-01-01")),
           時限: 1,
         },
         taken: undefined,
@@ -97,7 +98,7 @@ describe("StudyProgressRepository", () => {
       });
       expect(repo.getTakenSubjects()).toStrictEqual([]);
     })();
-    repo = repo.take(1, { date: "2021/1/1", 時限: 1 });
+    repo = repo.take(1, { date: parseDate("2021-01-01"), 時限: 1 });
     (() => {
       expect(repo.hasTaken(1)).toBe(true);
       const got = repo.getProgress(1);
@@ -107,7 +108,7 @@ describe("StudyProgressRepository", () => {
         subject: 1,
         reservation: undefined,
         taken: {
-          date: "2021/1/1",
+          date: formatDate(parseDate("2021-01-01")),
           時限: 1,
         },
       });

@@ -8,7 +8,9 @@ import {
 } from "@material-ui/core";
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
+import { formatShortDate } from "../date";
 import { ReservationSchedule, Schedule } from "../types";
+import { DateTime } from "./DateTime";
 
 const eqSchedule = (a: Schedule, b: Schedule): boolean =>
   a.date === b.date && a.時限 === b.時限;
@@ -46,9 +48,19 @@ const ReservationCheckbox: FC<ReservationCheckboxProps> = ({
           {...renderCheckboxState(selectedSchedule, reservedSchedule)}
         />
       }
-      label={`予約 (${
-        reservedSchedule ? reservedSchedule.date : "----/--/--"
-      })`}
+      label={
+        reservedSchedule ? (
+          <>
+            予約 (
+            <DateTime dateTime={reservedSchedule.date}>
+              {formatShortDate(reservedSchedule.date)}
+            </DateTime>
+            )
+          </>
+        ) : (
+          "予約 (--/--)"
+        )
+      }
     />
   );
 };

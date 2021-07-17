@@ -1,5 +1,5 @@
 export interface Schedule {
-  readonly date: string;
+  readonly date: Date;
   readonly 時限: 時限;
 }
 

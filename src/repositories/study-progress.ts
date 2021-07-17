@@ -1,10 +1,11 @@
 import type { KVSOptions } from "@kvs/types";
+import { formatDate, parseDate } from "../date";
 import { Draft, produce } from "../immer";
 import {
   createLocalStorageProvider,
   StorageProvider,
 } from "../infra/storage-provider";
-import { Schedule, 教科, 教科一覧 } from "../types";
+import { Schedule, 教科, 教科一覧, 時限 } from "../types";
 
 export const studyProgressStates = ["not-taken", "reserved", "taken"] as const;
 export const [progressNotTaken, progressReserved, progressTaken] =
@@ -18,6 +19,16 @@ const mapKeys = function* (
     yield parseInt(k) as 教科;
   }
 };
+
+const serializeSchedule = (schedule: Schedule): SerializedSchedule => ({
+  ...schedule,
+  date: formatDate(schedule.date),
+});
+
+const deserializeSchedule = (serialized: SerializedSchedule): Schedule => ({
+  ...serialized,
+  date: parseDate(serialized.date),
+});
 
 type StudyProgressMap = Readonly<
   {
@@ -36,7 +47,7 @@ const buildMap = (subjects: readonly 教科[]): StudyProgressMap =>
 
 type Serialization = Readonly<
   {
-    [P in 教科]: StudyProgressArgs;
+    [P in 教科]: SerializedStudyProgress;
   }
 >;
 
@@ -165,6 +176,17 @@ export class StudyProgressRepository {
   }
 }
 
+interface SerializedSchedule {
+  readonly date: string;
+  readonly 時限: 時限;
+}
+
+interface SerializedStudyProgress {
+  readonly subject: 教科;
+  readonly reservation?: SerializedSchedule;
+  readonly taken?: SerializedSchedule;
+}
+
 interface StudyProgressArgs {
   readonly subject: 教科;
   readonly reservation?: Schedule;
@@ -178,8 +200,16 @@ export class StudyProgress {
 
   static of = (subject: 教科): StudyProgress => new StudyProgress({ subject });
 
-  static hydrate = (serialized: StudyProgressArgs): StudyProgress =>
-    new StudyProgress(serialized);
+  static hydrate = (serialized: SerializedStudyProgress): StudyProgress =>
+    new StudyProgress({
+      subject: serialized.subject,
+      reservation: serialized.reservation
+        ? deserializeSchedule(serialized.reservation)
+        : undefined,
+      taken: serialized.taken
+        ? deserializeSchedule(serialized.taken)
+        : undefined,
+    });
 
   private constructor(args: StudyProgressArgs) {
     this.subject = args.subject;
@@ -229,11 +259,13 @@ export class StudyProgress {
     return this.updated(this.reservation, undefined);
   }
 
-  public toJSON(): StudyProgressArgs {
+  public toJSON(): SerializedStudyProgress {
     return {
       subject: this.subject,
-      reservation: this.reservation,
-      taken: this.taken,
+      reservation: this.reservation
+        ? serializeSchedule(this.reservation)
+        : undefined,
+      taken: this.taken ? serializeSchedule(this.taken) : undefined,
     };
   }
 }

@@ -14,15 +14,14 @@ import {
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import React, { FC, useState } from "react";
+import { parseSerializedDate } from "../date";
 import { periodTimeRange } from "../period";
 import currentSchedules from "../schedules.json";
 import { formatTerm } from "../term";
 import "../theme";
-import { 教科, 時限, 時限一覧 } from "../types";
-import {
-  OpenReservationButton,
-  OpenReservationButtonProps,
-} from "./OpenReservationButton";
+import { 教科, 時限一覧 } from "../types";
+import { OpenReservationButtonProps } from "./OpenReservationButton";
+import { ScheduleRow } from "./ScheduleRow";
 
 const useStyles = makeStyles({
   container: {
@@ -67,28 +66,12 @@ export const SchedulesList: FC<SchedulesListProps> = ({
         </TableHead>
         <TableBody>
           {currentSchedules.DailySchedules.map((ds) => (
-            <TableRow key={ds.Date} hover>
-              <TableCell />
-              <TableCell component="th" scope="row">
-                {ds.Date}
-              </TableCell>
-              {(ds.Schedules as (教科 | 0)[]).map((kyouka, idx) => (
-                <TableCell>
-                  {kyouka === 0 ? (
-                    ""
-                  ) : (
-                    <OpenReservationButton
-                      onClick={onClickJigenButton}
-                      schedule={{
-                        date: ds.Date,
-                        時限: (idx + 1) as 時限,
-                        教科: kyouka,
-                      }}
-                    />
-                  )}
-                </TableCell>
-              ))}
-            </TableRow>
+            <ScheduleRow
+              key={ds.Date}
+              onClickOpenReservationButton={onClickJigenButton}
+              date={parseSerializedDate(ds.Date)}
+              subjects={ds.Schedules as readonly (教科 | 0)[]}
+            />
           ))}
         </TableBody>
       </Table>

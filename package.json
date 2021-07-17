@@ -54,6 +54,24 @@
             }
           ]
         }
+      },
+      {
+        "files": [
+          "*"
+        ],
+        "excludedFiles": [
+          "date.ts"
+        ],
+        "rules": {
+          "no-restricted-imports": [
+            "error",
+            {
+              "paths": [
+                "date-fns"
+              ]
+            }
+          ]
+        }
       }
     ]
   },

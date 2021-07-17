@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
+import { formatShortDate } from "../date";
 import { periodTimeRange } from "../period";
 import { StudyProgress } from "../repositories/study-progress";
 import { formatTerm } from "../term";
@@ -29,7 +30,7 @@ interface SubjectProgressListProps {
 const format = (reservationSchedule: Schedule | undefined): string =>
   reservationSchedule === undefined
     ? ""
-    : ` (${reservationSchedule.date} ${
+    : ` (${formatShortDate(reservationSchedule.date)} ${
         reservationSchedule.時限
       }時限目 ${formatTerm(periodTimeRange[reservationSchedule.時限])})`;
 
