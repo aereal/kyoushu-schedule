@@ -6,6 +6,14 @@ export const [progressNotTaken, progressReserved, progressTaken] =
   studyProgressStates;
 export type StudyProgressState = typeof studyProgressStates[number];
 
+const mapKeys = function* (
+  map: StudyProgressMap
+): Generator<教科, void, unknown> {
+  for (const k of Object.keys(map)) {
+    yield parseInt(k) as 教科;
+  }
+};
+
 type StudyProgressMap = Readonly<
   {
     [P in 教科]: StudyProgress;
@@ -83,8 +91,8 @@ export class StudyProgressRepository {
   }
 
   private *entries(): Generator<[教科, StudyProgress], void, unknown> {
-    for (const [k, v] of Object.entries(this.map)) {
-      yield [parseInt(k) as 教科, v];
+    for (const a of mapKeys(this.map)) {
+      yield [a, this.map[a]];
     }
   }
 }
