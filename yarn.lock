@@ -1638,6 +1638,11 @@
   dependencies:
     "@kvs/storage" "^1.2.0"
 
+"@kvs/memorystorage@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@kvs/memorystorage/-/memorystorage-1.2.0.tgz#ccf3541605260989c19dfedf83c48a18d437c442"
+  integrity sha512-sTmT7J6zkGU4c/DX6UICzGZrbs964C3pPIOC9walyY+HqkV7X3sbsmmt4kz3UcLSD5DRq9wYEHkrFWb8k0evXQ==
+
 "@kvs/storage@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@kvs/storage/-/storage-1.2.0.tgz#b9eaaed145dcba1a42891b2f418402b8b4a60d01"
