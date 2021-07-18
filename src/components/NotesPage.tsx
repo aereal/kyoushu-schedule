@@ -1,6 +1,7 @@
 import { makeStyles, Typography } from "@material-ui/core";
 import { Alert, Color as Severity } from "@material-ui/lab";
 import React, { FC } from "react";
+import { Helmet } from "react-helmet";
 import { Route } from "type-route";
 import { routes } from "../router";
 
@@ -31,6 +32,9 @@ export const NotesPage: FC<NotesPageProps> = () => {
   const classes = useStyles();
   return (
     <>
+      <Helmet>
+        <title>備考 - 教習スケジュール</title>
+      </Helmet>
       <Typography variant="h4" className={classes.heading}>
         備考
       </Typography>
