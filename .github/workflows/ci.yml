@@ -30,4 +30,6 @@ jobs:
         run: yarn test
       - name: deploy
         # if: github.ref == 'refs/heads/main'
-        run: yarn deploy --token "${{ secrets.FIREBASE_TOKEN }}" --project "${{ secrets.FIREBASE_PROJECT }}"
+        run: |
+          yarn firebase target:apply hosting site kyoushu-schedule --token "${{ secrets.FIREBASE_TOKEN }}" --project "${{ secrets.FIREBASE_PROJECT }}"
+          yarn deploy --token "${{ secrets.FIREBASE_TOKEN }}" --project "${{ secrets.FIREBASE_PROJECT }}"
