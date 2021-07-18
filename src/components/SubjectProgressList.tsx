@@ -20,6 +20,7 @@ import { 教科 } from "../types";
 import { DateTime } from "./DateTime";
 
 const subjectNotes = new Map<教科, string>([
+  [11, "受講していなくとも卒業テストを受験可 (技能14, 15の後に実施)"],
   [25, "技能教習10 (自主経路設定教習) の前に受講すること"],
   [26, "技能教習16, 17 (高速道路教習) の前に受講すること"],
 ]);
