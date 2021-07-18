@@ -21,6 +21,7 @@ const Page: FC = () => {
       }
     };
     effect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
     const effect = async () => {
