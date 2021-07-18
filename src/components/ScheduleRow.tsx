@@ -1,7 +1,7 @@
 import { makeStyles, TableCell, TableRow } from "@material-ui/core";
 import clsx from "clsx";
 import React, { FC } from "react";
-import { formatShortDate, isPast } from "../date";
+import { format, isPast } from "../date";
 import "../theme";
 import { ReservationSchedule, 教科, 時限 } from "../types";
 import { DateTime } from "./DateTime";
@@ -9,6 +9,7 @@ import { OpenReservationButton } from "./OpenReservationButton";
 
 const useStyles = makeStyles((theme) => ({
   past: {
+    filter: "opacity(50%)",
     backgroundColor: theme.palette.grey[200],
   },
 }));
