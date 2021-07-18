@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "kyoushu-schedule",
     "public": "build",
     "ignore": [
       "firebase.json",
