@@ -1,5 +1,10 @@
 type Present<T> = T extends undefined ? never : T extends null ? never : T;
 
+export const getValue = <K, T extends Present<unknown>>(
+  map: Map<K, T>,
+  key: K
+): Maybe<T> => maybe(map.get(key));
+
 export const maybe = <T extends Present<unknown>>(
   maybeValue: T | null | undefined
 ): Maybe<T> =>
