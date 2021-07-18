@@ -7,7 +7,8 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Alert } from "@material-ui/lab";
 import React, { FC, useState } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
@@ -75,7 +76,9 @@ const ProgressListItem: FC<ProgressListItemProps> = ({ progress }) => {
             () => null
           )}
         </ListItemText>
-        {note.map(() => (open ? <ExpandLess /> : <ExpandMore />)).unwrap()}
+        {note
+          .map(() => (open ? <ExpandLessIcon /> : <ExpandMoreIcon />))
+          .unwrap()}
       </ListItem>
       {note
         .map((content) => (
