@@ -1,21 +1,28 @@
 import {
   Checkbox,
   CheckboxProps,
+  Collapse,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
-import React, { FC } from "react";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import { Alert } from "@material-ui/lab";
+import React, { FC, useState } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
 import { formatShortDate } from "../date";
-import { maybe } from "../maybe";
+import { getValue, maybe } from "../maybe";
 import { periodTimeRange } from "../period";
 import { StudyProgress } from "../repositories/study-progress";
 import { formatTerm } from "../term";
 import { 教科 } from "../types";
 import { DateTime } from "./DateTime";
 
+const subjectNotes = new Map<教科, string>([
+  [25, "技能教習10 (自主経路設定教習) の前に受講すること"],
+  [26, "技能教習16, 17 (高速道路教習) の前に受講すること"],
+]);
 
 const renderProps = (
   progress: StudyProgress
@@ -26,14 +33,27 @@ const renderProps = (
     ? { indeterminate: true }
     : {};
 
+const noop = () => {};
+
 interface ProgressListItemProps {
   readonly progress: StudyProgress;
 }
 
 const ProgressListItem: FC<ProgressListItemProps> = ({ progress }) => {
+  const [open, setOpen] = useState(false);
+  const note = getValue(subjectNotes, progress.subject);
+  const [handleClick, isButton] = note.fold<[() => void, false | undefined]>(
+    () => [
+      () => {
+        setOpen((prev) => !prev);
+      },
+      undefined,
+    ],
+    () => [noop, false]
+  );
   return (
     <>
-      <ListItem>
+      <ListItem button={isButton} onClick={handleClick}>
         <ListItemIcon>
           <Checkbox
             edge="start"
@@ -43,7 +63,7 @@ const ProgressListItem: FC<ProgressListItemProps> = ({ progress }) => {
           />
         </ListItemIcon>
         <ListItemText>
-          {progress.subject}
+          {progress.subject}{" "}
           {maybe(progress.reservation).fold(
             ({ date, 時限 }) => (
               <>
@@ -54,7 +74,15 @@ const ProgressListItem: FC<ProgressListItemProps> = ({ progress }) => {
             () => null
           )}
         </ListItemText>
+        {note.map(() => (open ? <ExpandLess /> : <ExpandMore />)).unwrap()}
       </ListItem>
+      {note
+        .map((content) => (
+          <Collapse in={open} unmountOnExit timeout="auto">
+            <Alert severity="info">{content}</Alert>
+          </Collapse>
+        ))
+        .unwrap()}
     </>
   );
 };
