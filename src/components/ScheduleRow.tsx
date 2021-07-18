@@ -37,7 +37,7 @@ export const ScheduleRow: FC<ScheduleRowProps> = ({
     >
       <TableCell />
       <TableCell component="th" scope="row">
-        <DateTime dateTime={date}>{formatShortDate(date)}</DateTime>
+        <DateTime dateTime={date}>{format(date, "MM/dd (eee)")}</DateTime>
       </TableCell>
       {subjects.map((kyouka, idx) => (
         <TableCell>
