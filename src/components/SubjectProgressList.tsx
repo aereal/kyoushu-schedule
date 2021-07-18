@@ -13,21 +13,9 @@ import { maybe } from "../maybe";
 import { periodTimeRange } from "../period";
 import { StudyProgress } from "../repositories/study-progress";
 import { formatTerm } from "../term";
-import { Schedule, 教科 } from "../types";
+import { 教科 } from "../types";
 import { DateTime } from "./DateTime";
 
-interface ReservationElementProps {
-  readonly schedule: Schedule;
-}
-
-const ReservationElement: FC<ReservationElementProps> = ({
-  schedule: { 時限, date },
-}) => (
-  <>
-    (<DateTime dateTime={date}>{formatShortDate(date)}</DateTime> {時限}時限目{" "}
-    {formatTerm(periodTimeRange[時限])})
-  </>
-);
 
 const renderProps = (
   progress: StudyProgress
@@ -37,6 +25,39 @@ const renderProps = (
     : progress.progressState === "reserved"
     ? { indeterminate: true }
     : {};
+
+interface ProgressListItemProps {
+  readonly progress: StudyProgress;
+}
+
+const ProgressListItem: FC<ProgressListItemProps> = ({ progress }) => {
+  return (
+    <>
+      <ListItem>
+        <ListItemIcon>
+          <Checkbox
+            edge="start"
+            tabIndex={-1}
+            disableRipple
+            {...renderProps(progress)}
+          />
+        </ListItemIcon>
+        <ListItemText>
+          {progress.subject}
+          {maybe(progress.reservation).fold(
+            ({ date, 時限 }) => (
+              <>
+                <DateTime dateTime={date}>{formatShortDate(date)}</DateTime>{" "}
+                {時限}時限目 {formatTerm(periodTimeRange[時限])}
+              </>
+            ),
+            () => null
+          )}
+        </ListItemText>
+      </ListItem>
+    </>
+  );
+};
 
 interface SubjectProgressListProps {
   readonly subjects: readonly 教科[];
@@ -49,25 +70,10 @@ export const SubjectProgressList: FC<SubjectProgressListProps> = ({
   return (
     <List dense={true}>
       {subjects.map((教科) => (
-        <ListItem key={教科}>
-          <ListItemIcon>
-            <Checkbox
-              edge="start"
-              tabIndex={-1}
-              disableRipple
-              {...renderProps(studyProgressRepo.getProgress(教科))}
-            />
-          </ListItemIcon>
-          <ListItemText>
-            {教科}
-            {maybe(studyProgressRepo.getProgress(教科).reservation).fold(
-              (schedule) => (
-                <ReservationElement schedule={schedule} />
-              ),
-              () => null
-            )}
-          </ListItemText>
-        </ListItem>
+        <ProgressListItem
+          key={教科}
+          progress={studyProgressRepo.getProgress(教科)}
+        />
       ))}
     </List>
   );
