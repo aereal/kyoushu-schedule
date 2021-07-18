@@ -18,7 +18,12 @@ interface Maybe<T extends Present<unknown>> {
   ) => Maybe<S>;
   readonly fold: <R>(onJust: (val: T) => R, onNone: () => R) => R;
   readonly isNone: boolean;
+  readonly unwrap: () => T | undefined;
 }
+
+const identity = <T>(t: T) => t;
+
+const nothing = () => undefined;
 
 class Just<T extends Present<unknown>> implements Maybe<T> {
   public readonly value: T;
@@ -43,6 +48,10 @@ class Just<T extends Present<unknown>> implements Maybe<T> {
   fold<R>(onJust: (val: T) => R, _: () => R): R {
     return onJust(this.value);
   }
+
+  unwrap(): T | undefined {
+    return this.fold(identity, nothing);
+  }
 }
 
 class None<T extends Present<unknown>> implements Maybe<T> {
@@ -62,5 +71,9 @@ class None<T extends Present<unknown>> implements Maybe<T> {
 
   fold<R>(_: (val: T) => R, onNone: () => R): R {
     return onNone();
+  }
+
+  unwrap(): T | undefined {
+    return this.fold(identity, nothing);
   }
 }
