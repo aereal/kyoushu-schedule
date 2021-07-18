@@ -6,6 +6,7 @@ import {
 } from "@material-ui/core";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import DashboardIcon from "@material-ui/icons/Dashboard";
+import NotesIcon from "@material-ui/icons/Notes";
 import React, { FC, MouseEventHandler, ReactNode } from "react";
 import { preventDefaultLinkClickBehavior, Route } from "type-route";
 import { routes, useRoute } from "../router";
@@ -49,6 +50,10 @@ const navItemDefinitions: Record<
   progress: {
     text: "Progress",
     icon: <CheckBoxIcon />,
+  },
+  notes: {
+    text: "Notes",
+    icon: <NotesIcon />,
   },
 };
 

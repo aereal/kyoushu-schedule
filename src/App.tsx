@@ -1,5 +1,6 @@
 import { Container, CssBaseline } from "@material-ui/core";
 import React, { FC, useEffect, useState } from "react";
+import { NotesPage } from "./components/NotesPage";
 import { ProgressPage } from "./components/ProgressPage";
 import { SchedulePage } from "./components/SchedulePage";
 import { Sidebar, useStyles } from "./components/Sidebar";
@@ -46,6 +47,7 @@ const Page: FC = () => {
               {route.name === "progress" ? (
                 <ProgressPage route={route} />
               ) : null}
+              {route.name === "notes" ? <NotesPage route={route} /> : null}
             </StudyProgressRepositoryProvider>
           </Container>
         </div>
