@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, makeStyles, Typography } from "@material-ui/core";
 import React, { FC } from "react";
 import { Route } from "type-route";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
@@ -13,12 +13,19 @@ import {
 import { SubjectProgressList } from "./SubjectProgressList";
 import { TakenSubjectsProgress } from "./TakenSubjectsProgress";
 
+const useStyles = makeStyles((theme) => ({
+  heading: {
+    marginBottom: theme.spacing(4),
+  },
+}));
+
 interface ProgressPageProps {
   readonly route: Route<typeof routes.progress>;
 }
 
 export const ProgressPage: FC<ProgressPageProps> = () => {
   const studyProgressRepo = useStudyProgressRepository();
+  const classes = useStyles();
   const [earlier, later] = studyProgressRepo
     .getTakenSubjects()
     .reduce<[第一段階教科[], 第二段階教科[]]>(
@@ -30,7 +37,9 @@ export const ProgressPage: FC<ProgressPageProps> = () => {
     );
   return (
     <>
-      <Typography variant="h4">履修状況</Typography>
+      <Typography variant="h4" className={classes.heading}>
+        履修状況
+      </Typography>
       <Grid container spacing={2}>
         <Grid item md={6}>
           <Typography variant="h5">第壱段階</Typography>
