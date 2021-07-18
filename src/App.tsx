@@ -1,7 +1,7 @@
 import { Container, CssBaseline } from "@material-ui/core";
 import React, { FC, useEffect, useState } from "react";
 import { ProgressPage } from "./components/ProgressPage";
-import { RootPage } from "./components/RootPage";
+import { SchedulePage } from "./components/SchedulePage";
 import { Sidebar, useStyles } from "./components/Sidebar";
 import { StudyProgressRepositoryProvider } from "./contexts/study-progress-repo";
 import { StudyProgressRepository } from "./repositories/study-progress";
@@ -38,7 +38,7 @@ const Page: FC = () => {
           <Container className={classes.container}>
             <StudyProgressRepositoryProvider value={progressRepo}>
               {route.name === "root" ? (
-                <RootPage
+                <SchedulePage
                   route={route}
                   setStudyProgressRepo={setProgressRepo}
                 />

@@ -6,14 +6,16 @@ import { ReservationSchedule } from "../types";
 import { JigenDialog } from "./JigenDialog";
 import { SchedulesList } from "./SchedulesList";
 
-interface RootPageProps {
+interface SchedulePageProps {
   readonly route: Route<typeof routes.root>;
   readonly setStudyProgressRepo: Dispatch<
     SetStateAction<StudyProgressRepository>
   >;
 }
 
-export const RootPage: FC<RootPageProps> = ({ setStudyProgressRepo }) => {
+export const SchedulePage: FC<SchedulePageProps> = ({
+  setStudyProgressRepo,
+}) => {
   const [dialogIsOpened, setDialogOpened] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState<
     ReservationSchedule | undefined
