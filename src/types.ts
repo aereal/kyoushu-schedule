@@ -1,12 +1,3 @@
-export interface Schedule {
-  readonly date: Date;
-  readonly 時限: 時限;
-}
-
-export interface ReservationSchedule extends Schedule {
-  readonly 教科: 教科;
-}
-
 export const 時限一覧 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 export type 時限 = typeof 時限一覧[number];
 
