@@ -1,7 +1,7 @@
 import { makeStyles, TableCell, TableRow } from "@material-ui/core";
 import clsx from "clsx";
 import React, { FC } from "react";
-import { format, isPast } from "../date";
+import { format, isPastDay } from "../date";
 import { ReservationSchedule } from "../schedule";
 import "../theme";
 import { 教科, 時限 } from "../types";
@@ -33,7 +33,7 @@ export const ScheduleRow: FC<ScheduleRowProps> = ({
     <TableRow
       hover
       className={clsx({
-        [classes.past]: isPast(date),
+        [classes.past]: isPastDay(date),
       })}
     >
       <TableCell />
