@@ -2,6 +2,7 @@ import { format as fnFormat, parse } from "date-fns";
 import { ja } from "date-fns/locale";
 export {
   formatISO as formatDate,
+  isEqual,
   isPast,
   parseISO as parseDate,
   startOfToday,
