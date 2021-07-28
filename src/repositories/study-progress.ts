@@ -5,6 +5,7 @@ import {
   createLocalStorageProvider,
   StorageProvider,
 } from "../infra/storage-provider";
+import { Maybe, maybe } from "../maybe";
 import { Schedule } from "../schedule";
 import { 教科, 教科一覧, 時限 } from "../types";
 
@@ -26,10 +27,11 @@ const serializeSchedule = (schedule: Schedule): SerializedSchedule => ({
   date: formatDate(schedule.date),
 });
 
-const deserializeSchedule = (serialized: SerializedSchedule): Schedule => ({
-  ...serialized,
-  date: parseDate(serialized.date),
-});
+const deserializeSchedule = (serialized: SerializedSchedule): Maybe<Schedule> =>
+  parseDate(serialized.date).map((date) => ({
+    ...serialized,
+    date,
+  }));
 
 type StudyProgressMap = Readonly<
   {
@@ -204,12 +206,12 @@ export class StudyProgress {
   static hydrate = (serialized: SerializedStudyProgress): StudyProgress =>
     new StudyProgress({
       subject: serialized.subject,
-      reservation: serialized.reservation
-        ? deserializeSchedule(serialized.reservation)
-        : undefined,
-      taken: serialized.taken
-        ? deserializeSchedule(serialized.taken)
-        : undefined,
+      reservation: maybe(serialized.reservation)
+        .flatMap((reservation) => deserializeSchedule(reservation))
+        .unwrap(),
+      taken: maybe(serialized.taken)
+        .flatMap((taken) => deserializeSchedule(taken))
+        .unwrap(),
     });
 
   protected constructor(args: StudyProgressArgs) {

@@ -1,15 +1,28 @@
-import { format as fnFormat, isBefore, parse, startOfDay } from "date-fns";
+import {
+  format as fnFormat,
+  isBefore,
+  isValid,
+  parse,
+  parseISO,
+  startOfDay,
+} from "date-fns";
 import { ja } from "date-fns/locale";
+import { Just, Maybe, None } from "./maybe";
 export {
   formatISO as formatDate,
   isEqual,
   isPast,
-  parseISO as parseDate,
   startOfToday,
 } from "date-fns";
 
-export const parseSerializedDate = (s: string): Date =>
-  parse(s, "yyyy/MM/dd", new Date());
+const assumeValid = (date: Date): Maybe<Date> =>
+  isValid(date) ? new Just(date) : new None();
+
+export const parseDate = (repr: string): Maybe<Date> =>
+  assumeValid(parseISO(repr));
+
+export const parseSerializedDate = (s: string): Maybe<Date> =>
+  assumeValid(parse(s, "yyyy/MM/dd", new Date()));
 
 export const formatShortDate = (d: Date): string => fnFormat(d, "MM/dd");
 

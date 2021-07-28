@@ -26,7 +26,7 @@ export const maybe = <T extends Present<unknown>>(
 export const isJust = <T extends Present<unknown>>(x: Maybe<T>): x is Just<T> =>
   !x.isNone;
 
-interface Maybe<T extends Present<unknown>> {
+export interface Maybe<T extends Present<unknown>> {
   readonly unsafeGet: () => T;
   readonly map: <S extends Present<unknown>>(fn: (val: T) => S) => Maybe<S>;
   readonly flatMap: <S extends Present<unknown>>(
@@ -41,7 +41,7 @@ const identity = <T>(t: T) => t;
 
 const nothing = () => undefined;
 
-class Just<T extends Present<unknown>> implements Maybe<T> {
+export class Just<T extends Present<unknown>> implements Maybe<T> {
   public readonly value: T;
   public readonly isNone: boolean = false;
 
@@ -70,7 +70,7 @@ class Just<T extends Present<unknown>> implements Maybe<T> {
   }
 }
 
-class None<T extends Present<unknown>> implements Maybe<T> {
+export class None<T extends Present<unknown>> implements Maybe<T> {
   public readonly isNone: boolean = true;
 
   unsafeGet(): T {
