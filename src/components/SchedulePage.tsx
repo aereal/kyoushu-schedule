@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { Route } from "type-route";
 import { StudyProgressRepository } from "../repositories/study-progress";
 import { routes } from "../router";
-import { ReservationSchedule } from "../schedule";
+import { equalsSchedule, ReservationSchedule } from "../schedule";
 import { JigenDialog } from "./JigenDialog";
 import { SchedulesList } from "./SchedulesList";
 
@@ -45,7 +45,8 @@ export const SchedulePage: FC<SchedulePageProps> = ({
     setStudyProgressRepo((repo) => {
       const { 教科, ...schedule } = selectedSchedule;
       const progress = repo.getProgress(教科);
-      return progress.hasReserved()
+      return progress.hasReserved() &&
+        equalsSchedule(progress.reservation, schedule)
         ? repo.releaseReservation(教科)
         : repo.reserve(教科, schedule);
     });
