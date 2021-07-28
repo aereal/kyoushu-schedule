@@ -17,16 +17,14 @@ interface SchedulePageProps {
 export const SchedulePage: FC<SchedulePageProps> = ({
   setStudyProgressRepo,
 }) => {
-  const [dialogIsOpened, setDialogOpened] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState<
     ReservationSchedule | undefined
   >();
   const onCloseDialog = (): void => {
-    setDialogOpened(false);
+    setSelectedSchedule(undefined);
   };
   const onClickJigenButton = (newSchedule: ReservationSchedule) => {
     setSelectedSchedule(newSchedule);
-    setDialogOpened(true);
   };
   const onCheck履修 = () => {
     if (selectedSchedule === undefined) {
@@ -58,7 +56,6 @@ export const SchedulePage: FC<SchedulePageProps> = ({
       </Helmet>
       <SchedulesList onClickJigenButton={onClickJigenButton} />
       <JigenDialog
-        open={dialogIsOpened}
         onClose={onCloseDialog}
         schedule={selectedSchedule}
         onCheck履修={onCheck履修}
