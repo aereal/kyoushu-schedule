@@ -1,5 +1,16 @@
 type Present<T> = T extends undefined ? never : T extends null ? never : T;
 
+export const parseMaybeInt = (
+  numeric: string,
+  radix?: number
+): Maybe<number> => {
+  const parsed = parseInt(numeric, radix);
+  if (isNaN(parsed)) {
+    return new None();
+  }
+  return new Just(parsed);
+};
+
 export const getValue = <K, T extends Present<unknown>>(
   map: Map<K, T>,
   key: K
