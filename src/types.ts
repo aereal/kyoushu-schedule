@@ -1,5 +1,8 @@
 export const 時限一覧 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 export type 時限 = typeof 時限一覧[number];
+const first時限: 時限 = 1;
+const last時限: 時限 = 10;
+export const is時限 = (n: number): n is 時限 => n >= first時限 && n <= last時限;
 
 export const 第一段階教科一覧 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 export const 第二段階教科一覧 = [
@@ -15,3 +18,5 @@ export type 教科 = 第一段階教科 | 第二段階教科;
 
 export const is第一段階 = (x: 教科): x is 第一段階教科 =>
   x >= 第一段階教科一覧[0] && x < 第二段階教科一覧[0];
+
+export const is教科 = (n: number): n is 教科 => n >= 1 && n <= 26;
