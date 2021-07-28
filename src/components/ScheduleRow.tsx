@@ -2,8 +2,9 @@ import { makeStyles, TableCell, TableRow } from "@material-ui/core";
 import clsx from "clsx";
 import React, { FC } from "react";
 import { format, isPast } from "../date";
+import { ReservationSchedule } from "../schedule";
 import "../theme";
-import { ReservationSchedule, 教科, 時限 } from "../types";
+import { 教科, 時限 } from "../types";
 import { DateTime } from "./DateTime";
 import { OpenReservationButton } from "./OpenReservationButton";
 

@@ -5,7 +5,8 @@ import {
   createLocalStorageProvider,
   StorageProvider,
 } from "../infra/storage-provider";
-import { Schedule, 教科, 教科一覧, 時限 } from "../types";
+import { Schedule } from "../schedule";
+import { 教科, 教科一覧, 時限 } from "../types";
 
 export const studyProgressStates = ["not-taken", "reserved", "taken"] as const;
 export const [progressNotTaken, progressReserved, progressTaken] =

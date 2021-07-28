@@ -11,8 +11,9 @@ import {
   progressReserved,
   progressTaken,
 } from "../repositories/study-progress";
+import { ReservationSchedule } from "../schedule";
 import "../theme";
-import { ReservationSchedule, 教科, 教科一覧 } from "../types";
+import { 教科, 教科一覧 } from "../types";
 
 type SubjectColorClass = `subject${教科}-not-taken`;
 type ReservedSubjectColorClass = `subject${教科}-reserved`;

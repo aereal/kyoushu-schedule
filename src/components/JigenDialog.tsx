@@ -9,7 +9,7 @@ import {
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
 import { formatShortDate, isEqual, isPast } from "../date";
-import { ReservationSchedule, Schedule } from "../types";
+import { ReservationSchedule, Schedule } from "../schedule";
 import { DateTime } from "./DateTime";
 
 const eqSchedule = (a: Schedule, b: Schedule): boolean =>

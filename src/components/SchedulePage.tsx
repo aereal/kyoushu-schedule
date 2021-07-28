@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { Route } from "type-route";
 import { StudyProgressRepository } from "../repositories/study-progress";
 import { routes } from "../router";
-import { ReservationSchedule } from "../types";
+import { ReservationSchedule } from "../schedule";
 import { JigenDialog } from "./JigenDialog";
 import { SchedulesList } from "./SchedulesList";
 
