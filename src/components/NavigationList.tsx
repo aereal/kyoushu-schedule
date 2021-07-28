@@ -9,7 +9,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import NotesIcon from "@material-ui/icons/Notes";
 import React, { FC, MouseEventHandler, ReactNode } from "react";
 import { preventDefaultLinkClickBehavior, Route } from "type-route";
-import { routes, useRoute } from "../router";
+import { routes, StaticRoute, useRoute } from "../router";
 
 interface LinkListItemProps extends ListItemProps<"a", { button?: true }> {
   readonly route: Route<typeof routes>;
@@ -38,7 +38,7 @@ const LinkListItem: FC<LinkListItemProps> = ({
 };
 
 const navItemDefinitions: Record<
-  Exclude<keyof typeof routes, "root2" | "schedule">,
+  StaticRoute["name"],
   { readonly text: string; readonly icon: ReactNode }
 > = {
   root: {

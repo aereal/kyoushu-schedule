@@ -4,6 +4,7 @@ import {
   defineRoute,
   noMatch,
   param,
+  Route,
   ValueSerializer,
 } from "type-route";
 import { format, parseDate } from "./date";
@@ -60,6 +61,24 @@ export const { RouteProvider, useRoute, routes } = createRouter({
     ({ schedule }) => `/schedules/${schedule}`
   ),
 });
+
+type GetStaticRoutes<T extends Route<typeof routes>> = T extends {
+  params: infer P;
+}
+  ? {} extends P
+    ? T
+    : never
+  : never;
+
+type ExcludingNotFoundRoute<T extends Route<typeof routes>> = T extends {
+  name: false;
+}
+  ? never
+  : T;
+
+export type StaticRoute = ExcludingNotFoundRoute<
+  GetStaticRoutes<Route<typeof routes>>
+>;
 
 export const groups = {
   schedule: createGroup([routes.root, routes.schedule]),
