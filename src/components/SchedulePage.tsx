@@ -2,13 +2,13 @@ import React, { Dispatch, FC, SetStateAction } from "react";
 import { Helmet } from "react-helmet";
 import { Route } from "type-route";
 import { StudyProgressRepository } from "../repositories/study-progress";
-import { routes } from "../router";
+import { groups, routes } from "../router";
 import { equalsSchedule, ReservationSchedule } from "../schedule";
 import { JigenDialog } from "./JigenDialog";
 import { SchedulesList } from "./SchedulesList";
 
 interface SchedulePageProps {
-  readonly route: Route<typeof routes.root>;
+  readonly route: Route<typeof groups.schedule>;
   readonly setStudyProgressRepo: Dispatch<
     SetStateAction<StudyProgressRepository>
   >;
@@ -18,12 +18,13 @@ export const SchedulePage: FC<SchedulePageProps> = ({
   setStudyProgressRepo,
   route,
 }) => {
-  const selectedSchedule = route.params.schedule;
+  const selectedSchedule =
+    "schedule" in route.params ? route.params.schedule : undefined;
   const onCloseDialog = (): void => {
     routes.root().push();
   };
   const onClickJigenButton = (newSchedule: ReservationSchedule) => {
-    routes.root({ schedule: newSchedule }).push();
+    routes.schedule({ schedule: newSchedule }).push();
   };
   const onCheck履修 = () => {
     if (selectedSchedule === undefined) {

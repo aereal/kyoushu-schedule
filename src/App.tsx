@@ -6,7 +6,7 @@ import { SchedulePage } from "./components/SchedulePage";
 import { Sidebar, useStyles } from "./components/Sidebar";
 import { StudyProgressRepositoryProvider } from "./contexts/study-progress-repo";
 import { StudyProgressRepository } from "./repositories/study-progress";
-import { RouteProvider, useRoute } from "./router";
+import { groups, RouteProvider, useRoute } from "./router";
 import { CustomThemeProvider } from "./theme";
 
 const Page: FC = () => {
@@ -39,7 +39,7 @@ const Page: FC = () => {
         <div className={classes.toolbar}>
           <Container className={classes.container}>
             <StudyProgressRepositoryProvider value={progressRepo}>
-              {route.name === "root" ? (
+              {groups.schedule.has(route) ? (
                 <SchedulePage
                   route={route}
                   setStudyProgressRepo={setProgressRepo}

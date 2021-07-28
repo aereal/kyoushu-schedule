@@ -1,4 +1,5 @@
 import {
+  createGroup,
   createRouter,
   defineRoute,
   noMatch,
@@ -49,12 +50,17 @@ export const scheduleSerializer: ValueSerializer<ReservationSchedule> = {
 };
 
 export const { RouteProvider, useRoute, routes } = createRouter({
-  root: defineRoute(
-    {
-      schedule: param.query.optional.ofType(scheduleSerializer),
-    },
-    () => "/"
-  ),
+  root: defineRoute("/"),
   progress: defineRoute("/progress"),
   notes: defineRoute("/notes"),
+  schedule: defineRoute(
+    {
+      schedule: param.path.ofType(scheduleSerializer),
+    },
+    ({ schedule }) => `/schedules/${schedule}`
+  ),
 });
+
+export const groups = {
+  schedule: createGroup([routes.root, routes.schedule]),
+};
