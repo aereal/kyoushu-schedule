@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import React, { Dispatch, FC, SetStateAction } from "react";
 import { Helmet } from "react-helmet";
 import { Route } from "type-route";
 import { StudyProgressRepository } from "../repositories/study-progress";
@@ -16,15 +16,14 @@ interface SchedulePageProps {
 
 export const SchedulePage: FC<SchedulePageProps> = ({
   setStudyProgressRepo,
+  route,
 }) => {
-  const [selectedSchedule, setSelectedSchedule] = useState<
-    ReservationSchedule | undefined
-  >();
+  const selectedSchedule = route.params.schedule;
   const onCloseDialog = (): void => {
-    setSelectedSchedule(undefined);
+    routes.root().push();
   };
   const onClickJigenButton = (newSchedule: ReservationSchedule) => {
-    setSelectedSchedule(newSchedule);
+    routes.root({ schedule: newSchedule }).push();
   };
   const onCheck履修 = () => {
     if (selectedSchedule === undefined) {
