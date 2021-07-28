@@ -1,3 +1,4 @@
+import { utcToZonedTime } from "date-fns-tz";
 import { isPastDay, parseDate } from "./date";
 
 describe("date", () => {
@@ -34,7 +35,7 @@ describe("date", () => {
   describe.each<{ repr: string; expected: Date | undefined }>([
     {
       repr: "2021-01-01",
-      expected: new Date(1609426800000),
+      expected: utcToZonedTime(new Date(1609426800000), "Asia/Tokyo"),
     },
     {
       repr: "abc",
