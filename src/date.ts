@@ -1,4 +1,4 @@
-import { format as fnFormat, parse } from "date-fns";
+import { format as fnFormat, isBefore, parse, startOfDay } from "date-fns";
 import { ja } from "date-fns/locale";
 export {
   formatISO as formatDate,
@@ -15,3 +15,6 @@ export const formatShortDate = (d: Date): string => fnFormat(d, "MM/dd");
 
 export const format = (date: Date, template: string): string =>
   fnFormat(date, template, { locale: ja });
+
+export const isPastDay = (date: Date, base: Date = new Date()): boolean =>
+  isBefore(date, startOfDay(base));
