@@ -41,7 +41,10 @@ const ReservationCheckbox: FC<ReservationCheckboxProps> = ({
         <Checkbox
           color="default"
           onChange={onCheckReservation}
-          disabled={isPast(selectedSchedule.date) || progress.hasTaken}
+          disabled={
+            (!progress.hasReserved() && isPast(selectedSchedule.date)) ||
+            progress.hasTaken
+          }
           {...renderCheckboxState(selectedSchedule, reservedSchedule)}
         />
       }
