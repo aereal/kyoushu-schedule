@@ -35,6 +35,7 @@ export interface Maybe<T extends Present<unknown>> {
   readonly fold: <R>(onJust: (val: T) => R, onNone: () => R) => R;
   readonly isNone: boolean;
   readonly unwrap: () => T | undefined;
+  readonly getWithDefault: (defaultValue: () => T) => T;
 }
 
 const identity = <T>(t: T) => t;
@@ -68,6 +69,10 @@ export class Just<T extends Present<unknown>> implements Maybe<T> {
   unwrap(): T | undefined {
     return this.fold(identity, nothing);
   }
+
+  getWithDefault(): T {
+    return this.value;
+  }
 }
 
 export class None<T extends Present<unknown>> implements Maybe<T> {
@@ -91,5 +96,9 @@ export class None<T extends Present<unknown>> implements Maybe<T> {
 
   unwrap(): T | undefined {
     return this.fold(identity, nothing);
+  }
+
+  getWithDefault(defaultValue: () => T): T {
+    return defaultValue();
   }
 }
