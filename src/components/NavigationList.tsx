@@ -37,10 +37,8 @@ const LinkListItem: FC<LinkListItemProps> = ({
   );
 };
 
-type RouteKey = keyof typeof routes;
-
 const navItemDefinitions: Record<
-  RouteKey,
+  Exclude<keyof typeof routes, "root2" | "schedule">,
   { readonly text: string; readonly icon: ReactNode }
 > = {
   root: {
@@ -65,7 +63,9 @@ export const NavigationList: FC<NavigationListProps> = ({
   afterNavigation,
 }) => {
   const route = useRoute();
-  const routeNames = Object.keys(routes) as (keyof typeof routes)[];
+  const routeNames = Object.keys(
+    navItemDefinitions
+  ) as (keyof typeof navItemDefinitions)[];
   return (
     <>
       {routeNames.map((name) => (
