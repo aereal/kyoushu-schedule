@@ -212,7 +212,7 @@ export class StudyProgress {
         : undefined,
     });
 
-  private constructor(args: StudyProgressArgs) {
+  protected constructor(args: StudyProgressArgs) {
     this.subject = args.subject;
     this.reservation = args.reservation;
     this.taken = args.taken;
@@ -240,7 +240,7 @@ export class StudyProgress {
     return this.progressState === "taken";
   }
 
-  get hasReserved(): boolean {
+  hasReserved(): this is ReservedProgress {
     return this.progressState === "reserved";
   }
 
@@ -268,5 +268,14 @@ export class StudyProgress {
         : undefined,
       taken: this.taken ? serializeSchedule(this.taken) : undefined,
     };
+  }
+}
+
+class ReservedProgress extends StudyProgress {
+  public readonly reservation: Schedule;
+
+  constructor(args: StudyProgressArgs & { readonly reservation: Schedule }) {
+    super(args);
+    this.reservation = args.reservation;
   }
 }

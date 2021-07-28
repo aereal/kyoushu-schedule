@@ -47,7 +47,7 @@ describe("StudyProgressRepository", () => {
     (() => {
       const got = repo.getProgress(1);
       expect(got.hasTaken).toBe(false);
-      expect(got.hasReserved).toBe(false);
+      expect(got.hasReserved()).toBe(false);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
         reservation: undefined,
@@ -59,7 +59,7 @@ describe("StudyProgressRepository", () => {
     (() => {
       const got = repo.getProgress(1);
       expect(got.hasTaken).toBe(false);
-      expect(got.hasReserved).toBe(true);
+      expect(got.hasReserved()).toBe(true);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
         reservation: {
@@ -74,7 +74,7 @@ describe("StudyProgressRepository", () => {
     (() => {
       const got = repo.getProgress(1);
       expect(got.hasTaken).toBe(false);
-      expect(got.hasReserved).toBe(false);
+      expect(got.hasReserved()).toBe(false);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
         reservation: undefined,
@@ -90,7 +90,7 @@ describe("StudyProgressRepository", () => {
       expect(repo.hasTaken(1)).toBe(false);
       const got = repo.getProgress(1);
       expect(got.hasTaken).toBe(false);
-      expect(got.hasReserved).toBe(false);
+      expect(got.hasReserved()).toBe(false);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
         reservation: undefined,
@@ -103,7 +103,7 @@ describe("StudyProgressRepository", () => {
       expect(repo.hasTaken(1)).toBe(true);
       const got = repo.getProgress(1);
       expect(got.hasTaken).toBe(true);
-      expect(got.hasReserved).toBe(false);
+      expect(got.hasReserved()).toBe(false);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
         reservation: undefined,
@@ -119,7 +119,7 @@ describe("StudyProgressRepository", () => {
       expect(repo.hasTaken(1)).toBe(false);
       const got = repo.getProgress(1);
       expect(got.hasTaken).toBe(false);
-      expect(got.hasReserved).toBe(false);
+      expect(got.hasReserved()).toBe(false);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
         reservation: undefined,

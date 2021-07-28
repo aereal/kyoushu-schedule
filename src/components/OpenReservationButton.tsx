@@ -74,8 +74,8 @@ export const OpenReservationButton: FC<OpenReservationButtonProps> = ({
     [progressReserved]: `subject${教科}-reserved` as ReservedSubjectColorClass,
   }[progress.progressState];
   const exactDay =
-    progress.hasReserved &&
-    progress.reservation?.date.valueOf() === schedule.date.valueOf();
+    progress.hasReserved() &&
+    progress.reservation.date.valueOf() === schedule.date.valueOf();
   return (
     <Button
       onClick={onClick.bind(null, schedule)}
@@ -85,7 +85,7 @@ export const OpenReservationButton: FC<OpenReservationButtonProps> = ({
     >
       <ButtonIcon
         履修済み={progress.hasTaken}
-        予約済み={progress.hasReserved}
+        予約済み={progress.hasReserved()}
       />
       {教科}
     </Button>

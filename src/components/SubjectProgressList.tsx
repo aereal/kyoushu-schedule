@@ -31,7 +31,7 @@ const renderProps = (
 ): Pick<CheckboxProps, "indeterminate" | "checked"> =>
   progress.progressState === "taken"
     ? { checked: true }
-    : progress.progressState === "reserved"
+    : progress.hasReserved()
     ? { indeterminate: true }
     : {};
 
