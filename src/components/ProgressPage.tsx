@@ -1,5 +1,6 @@
 import { Grid, makeStyles, Typography } from "@material-ui/core";
 import React, { FC } from "react";
+import { Helmet } from "react-helmet";
 import { Route } from "type-route";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
 import { routes } from "../router";
@@ -37,6 +38,9 @@ export const ProgressPage: FC<ProgressPageProps> = () => {
     );
   return (
     <>
+      <Helmet>
+        <title>履修状況 - 教習スケジュール</title>
+      </Helmet>
       <Typography variant="h4" className={classes.heading}>
         履修状況
       </Typography>

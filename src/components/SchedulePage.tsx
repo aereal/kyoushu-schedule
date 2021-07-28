@@ -1,4 +1,5 @@
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import { Helmet } from "react-helmet";
 import { Route } from "type-route";
 import { StudyProgressRepository } from "../repositories/study-progress";
 import { routes } from "../router";
@@ -51,6 +52,9 @@ export const SchedulePage: FC<SchedulePageProps> = ({
   };
   return (
     <>
+      <Helmet>
+        <title>スケジュール一覧 - 教習スケジュール</title>
+      </Helmet>
       <SchedulesList onClickJigenButton={onClickJigenButton} />
       <JigenDialog
         open={dialogIsOpened}
