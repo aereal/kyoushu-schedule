@@ -8,12 +8,9 @@ import {
 } from "@material-ui/core";
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
-import { formatShortDate, isEqual, isPast } from "../date";
-import { ReservationSchedule, Schedule } from "../schedule";
+import { formatShortDate, isPast } from "../date";
+import { equalsSchedule, ReservationSchedule, Schedule } from "../schedule";
 import { DateTime } from "./DateTime";
-
-const eqSchedule = (a: Schedule, b: Schedule): boolean =>
-  isEqual(a.date, b.date) && a.時限 === b.時限;
 
 const renderCheckboxState = (
   currentSchedule: ReservationSchedule,
@@ -21,7 +18,7 @@ const renderCheckboxState = (
 ): Pick<CheckboxProps, "checked" | "indeterminate"> =>
   reservedSchedule === undefined
     ? { checked: false }
-    : eqSchedule(reservedSchedule, currentSchedule)
+    : equalsSchedule(reservedSchedule, currentSchedule)
     ? { checked: true }
     : { indeterminate: true };
 
