@@ -1,4 +1,4 @@
-import { maybe } from "./maybe";
+import { maybe, parseMaybeInt } from "./maybe";
 
 describe("Maybe", () => {
   test("null", () => {
@@ -32,5 +32,16 @@ describe("Maybe", () => {
       const got = maybe<number>(1).unwrap();
       expect(got).toBe(1);
     });
+  });
+});
+
+describe.each<{ numeric: string; parsed: number | undefined }>([
+  {
+    numeric: "10",
+    parsed: 10,
+  },
+])("parseMaybeInt", ({ numeric, parsed }) => {
+  test(`numeric=${numeric} parsed=${parsed}`, () => {
+    expect(parseMaybeInt(numeric).unwrap()).toStrictEqual(parsed);
   });
 });

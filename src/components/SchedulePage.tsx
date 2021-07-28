@@ -1,14 +1,14 @@
-import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import React, { Dispatch, FC, SetStateAction } from "react";
 import { Helmet } from "react-helmet";
 import { Route } from "type-route";
 import { StudyProgressRepository } from "../repositories/study-progress";
-import { routes } from "../router";
+import { groups, routes } from "../router";
 import { equalsSchedule, ReservationSchedule } from "../schedule";
 import { JigenDialog } from "./JigenDialog";
 import { SchedulesList } from "./SchedulesList";
 
 interface SchedulePageProps {
-  readonly route: Route<typeof routes.root>;
+  readonly route: Route<typeof groups.schedule>;
   readonly setStudyProgressRepo: Dispatch<
     SetStateAction<StudyProgressRepository>
   >;
@@ -16,17 +16,15 @@ interface SchedulePageProps {
 
 export const SchedulePage: FC<SchedulePageProps> = ({
   setStudyProgressRepo,
+  route,
 }) => {
-  const [dialogIsOpened, setDialogOpened] = useState(false);
-  const [selectedSchedule, setSelectedSchedule] = useState<
-    ReservationSchedule | undefined
-  >();
+  const selectedSchedule =
+    "schedule" in route.params ? route.params.schedule : undefined;
   const onCloseDialog = (): void => {
-    setDialogOpened(false);
+    routes.root().push();
   };
   const onClickJigenButton = (newSchedule: ReservationSchedule) => {
-    setSelectedSchedule(newSchedule);
-    setDialogOpened(true);
+    routes.schedule({ schedule: newSchedule }).push();
   };
   const onCheck履修 = () => {
     if (selectedSchedule === undefined) {
@@ -58,7 +56,6 @@ export const SchedulePage: FC<SchedulePageProps> = ({
       </Helmet>
       <SchedulesList onClickJigenButton={onClickJigenButton} />
       <JigenDialog
-        open={dialogIsOpened}
         onClose={onCloseDialog}
         schedule={selectedSchedule}
         onCheck履修={onCheck履修}

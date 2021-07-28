@@ -1,5 +1,16 @@
 type Present<T> = T extends undefined ? never : T extends null ? never : T;
 
+export const parseMaybeInt = (
+  numeric: string,
+  radix?: number
+): Maybe<number> => {
+  const parsed = parseInt(numeric, radix);
+  if (isNaN(parsed)) {
+    return new None();
+  }
+  return new Just(parsed);
+};
+
 export const getValue = <K, T extends Present<unknown>>(
   map: Map<K, T>,
   key: K
@@ -15,7 +26,7 @@ export const maybe = <T extends Present<unknown>>(
 export const isJust = <T extends Present<unknown>>(x: Maybe<T>): x is Just<T> =>
   !x.isNone;
 
-interface Maybe<T extends Present<unknown>> {
+export interface Maybe<T extends Present<unknown>> {
   readonly unsafeGet: () => T;
   readonly map: <S extends Present<unknown>>(fn: (val: T) => S) => Maybe<S>;
   readonly flatMap: <S extends Present<unknown>>(
@@ -24,13 +35,14 @@ interface Maybe<T extends Present<unknown>> {
   readonly fold: <R>(onJust: (val: T) => R, onNone: () => R) => R;
   readonly isNone: boolean;
   readonly unwrap: () => T | undefined;
+  readonly getWithDefault: (defaultValue: () => T) => T;
 }
 
 const identity = <T>(t: T) => t;
 
 const nothing = () => undefined;
 
-class Just<T extends Present<unknown>> implements Maybe<T> {
+export class Just<T extends Present<unknown>> implements Maybe<T> {
   public readonly value: T;
   public readonly isNone: boolean = false;
 
@@ -57,9 +69,13 @@ class Just<T extends Present<unknown>> implements Maybe<T> {
   unwrap(): T | undefined {
     return this.fold(identity, nothing);
   }
+
+  getWithDefault(): T {
+    return this.value;
+  }
 }
 
-class None<T extends Present<unknown>> implements Maybe<T> {
+export class None<T extends Present<unknown>> implements Maybe<T> {
   public readonly isNone: boolean = true;
 
   unsafeGet(): T {
@@ -80,5 +96,9 @@ class None<T extends Present<unknown>> implements Maybe<T> {
 
   unwrap(): T | undefined {
     return this.fold(identity, nothing);
+  }
+
+  getWithDefault(defaultValue: () => T): T {
+    return defaultValue();
   }
 }

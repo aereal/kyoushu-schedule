@@ -65,17 +65,18 @@ export const SchedulesList: FC<SchedulesListProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {currentSchedules.DailySchedules.map((ds) => {
-            const date = parseSerializedDate(ds.Date);
-            return (
-              <ScheduleRow
-                key={ds.Date}
-                onClickOpenReservationButton={onClickJigenButton}
-                date={date}
-                subjects={ds.Schedules as readonly (教科 | 0)[]}
-              />
-            );
-          })}
+          {currentSchedules.DailySchedules.map((ds) =>
+            parseSerializedDate(ds.Date)
+              .map((date) => (
+                <ScheduleRow
+                  key={ds.Date}
+                  onClickOpenReservationButton={onClickJigenButton}
+                  date={date}
+                  subjects={ds.Schedules as readonly (教科 | 0)[]}
+                />
+              ))
+              .unwrap()
+          )}
         </TableBody>
       </Table>
     </TableContainer>

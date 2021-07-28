@@ -102,7 +102,6 @@ const JigenDialogContent: FC<JigenDialogContentProps> = ({
 };
 
 interface JigenDialogProps {
-  readonly open: boolean;
   readonly onClose: () => void;
   readonly schedule?: ReservationSchedule;
   readonly onCheck履修: JigenDialogContentProps["onCheck履修"];
@@ -110,13 +109,12 @@ interface JigenDialogProps {
 }
 
 export const JigenDialog: FC<JigenDialogProps> = ({
-  open,
   onClose,
   onCheck履修,
   schedule,
   onCheckReservation,
 }) => (
-  <Dialog open={open} onClose={onClose} maxWidth="md">
+  <Dialog open={schedule !== undefined} onClose={onClose} maxWidth="md">
     {schedule ? (
       <JigenDialogContent
         schedule={schedule}

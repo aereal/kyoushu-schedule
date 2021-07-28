@@ -9,7 +9,7 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import NotesIcon from "@material-ui/icons/Notes";
 import React, { FC, MouseEventHandler, ReactNode } from "react";
 import { preventDefaultLinkClickBehavior, Route } from "type-route";
-import { routes, useRoute } from "../router";
+import { routes, StaticRoute, useRoute } from "../router";
 
 interface LinkListItemProps extends ListItemProps<"a", { button?: true }> {
   readonly route: Route<typeof routes>;
@@ -37,10 +37,8 @@ const LinkListItem: FC<LinkListItemProps> = ({
   );
 };
 
-type RouteKey = keyof typeof routes;
-
 const navItemDefinitions: Record<
-  RouteKey,
+  StaticRoute["name"],
   { readonly text: string; readonly icon: ReactNode }
 > = {
   root: {
@@ -65,7 +63,9 @@ export const NavigationList: FC<NavigationListProps> = ({
   afterNavigation,
 }) => {
   const route = useRoute();
-  const routeNames = Object.keys(routes) as (keyof typeof routes)[];
+  const routeNames = Object.keys(
+    navItemDefinitions
+  ) as (keyof typeof navItemDefinitions)[];
   return (
     <>
       {routeNames.map((name) => (
