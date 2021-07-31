@@ -41,10 +41,7 @@ const ProgressListItem: FC<ProgressListItemProps> = ({ progress }) => {
             children={children}
             component="a"
             {...routes.schedule({
-              schedule: new ReservationSchedule({
-                ...schedule,
-                教科: progress.subject,
-              }),
+              schedule: ReservationSchedule.from(schedule, progress.subject),
             }).link}
           />
         ),

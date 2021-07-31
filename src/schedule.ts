@@ -18,6 +18,14 @@ export class Schedule {
 export class ReservationSchedule extends Schedule {
   public readonly 教科: 教科;
 
+  static from(parent: Schedule, 教科: 教科): ReservationSchedule {
+    return new ReservationSchedule({
+      教科,
+      date: parent.date,
+      時限: parent.時限,
+    });
+  }
+
   constructor(args: {
     readonly date: Date;
     readonly 時限: 時限;
