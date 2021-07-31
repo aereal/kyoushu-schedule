@@ -4,8 +4,8 @@ export interface CreateGoogleCalendarLinkOptions {
   readonly title: string;
   readonly details?: string;
   readonly location?: string;
-  readonly startLocalDate: Date;
-  readonly endLocalDate: Date;
+  readonly startLocalTime: Date;
+  readonly endLocalTime: Date;
 }
 
 export const createGoogleCalendarLink = (
@@ -14,7 +14,7 @@ export const createGoogleCalendarLink = (
   const qs = new URLSearchParams({
     action: "TEMPLATE",
     text: options.title,
-    dates: `${fmt(options.startLocalDate)}/${fmt(options.endLocalDate)}`,
+    dates: `${fmt(options.startLocalTime)}/${fmt(options.endLocalTime)}`,
   });
   if (options.details !== undefined) {
     qs.set("details", options.details);
