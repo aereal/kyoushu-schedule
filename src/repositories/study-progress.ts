@@ -9,7 +9,11 @@ import { Maybe, maybe } from "../maybe";
 import { Schedule } from "../schedule";
 import { 教科, 教科一覧, 時限 } from "../types";
 
-export const studyProgressStates = ["not-taken", "reserved", "taken"] as const;
+export const studyProgressStates = [
+  "no-schedule",
+  "reserved",
+  "taken",
+] as const;
 export const [progressNotTaken, progressReserved, progressTaken] =
   studyProgressStates;
 export type StudyProgressState = typeof studyProgressStates[number];
@@ -227,7 +231,7 @@ export class StudyProgress {
     if (this.reservation !== undefined) {
       return "reserved";
     }
-    return "not-taken";
+    return "no-schedule";
   }
 
   private updated(reservation?: Schedule, taken?: Schedule): StudyProgress {
