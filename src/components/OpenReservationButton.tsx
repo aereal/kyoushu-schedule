@@ -83,7 +83,7 @@ export const OpenReservationButton: FC<OpenReservationButtonProps> = ({
       })}
     >
       <ButtonIcon
-        履修済み={progress.hasTaken}
+        履修済み={progress.hasTaken()}
         予約済み={progress.hasReserved()}
       />
       {教科}

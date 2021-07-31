@@ -48,7 +48,7 @@ describe("StudyProgressRepository", () => {
     let [repo] = await TestRepository.forTest();
     (() => {
       const got = repo.getProgress(1);
-      expect(got.hasTaken).toBe(false);
+      expect(got.hasTaken()).toBe(false);
       expect(got.hasReserved()).toBe(false);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
@@ -60,7 +60,7 @@ describe("StudyProgressRepository", () => {
     repo = repo.reserve(1, { date: mustParseDate("2021-01-01"), 時限: 1 });
     (() => {
       const got = repo.getProgress(1);
-      expect(got.hasTaken).toBe(false);
+      expect(got.hasTaken()).toBe(false);
       expect(got.hasReserved()).toBe(true);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
@@ -75,7 +75,7 @@ describe("StudyProgressRepository", () => {
     repo = repo.releaseReservation(1);
     (() => {
       const got = repo.getProgress(1);
-      expect(got.hasTaken).toBe(false);
+      expect(got.hasTaken()).toBe(false);
       expect(got.hasReserved()).toBe(false);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
@@ -91,7 +91,7 @@ describe("StudyProgressRepository", () => {
     (() => {
       expect(repo.hasTaken(1)).toBe(false);
       const got = repo.getProgress(1);
-      expect(got.hasTaken).toBe(false);
+      expect(got.hasTaken()).toBe(false);
       expect(got.hasReserved()).toBe(false);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
@@ -104,7 +104,7 @@ describe("StudyProgressRepository", () => {
     (() => {
       expect(repo.hasTaken(1)).toBe(true);
       const got = repo.getProgress(1);
-      expect(got.hasTaken).toBe(true);
+      expect(got.hasTaken()).toBe(true);
       expect(got.hasReserved()).toBe(false);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,
@@ -120,7 +120,7 @@ describe("StudyProgressRepository", () => {
     (() => {
       expect(repo.hasTaken(1)).toBe(false);
       const got = repo.getProgress(1);
-      expect(got.hasTaken).toBe(false);
+      expect(got.hasTaken()).toBe(false);
       expect(got.hasReserved()).toBe(false);
       expect(got.toJSON()).toStrictEqual({
         subject: 1,

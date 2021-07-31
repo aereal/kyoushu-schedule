@@ -120,7 +120,7 @@ export class StudyProgressRepository {
   }
 
   public hasTaken(subject: 教科): boolean {
-    return this.getProgress(subject).hasTaken;
+    return this.getProgress(subject).hasTaken();
   }
 
   public getProgress(subject: 教科): StudyProgress {
@@ -130,7 +130,7 @@ export class StudyProgressRepository {
   public getTakenSubjects(): readonly 教科[] {
     const ret: 教科[] = [];
     for (const [subject, progress] of this.entries()) {
-      if (progress.hasTaken) {
+      if (progress.hasTaken()) {
         ret.push(subject);
       }
     }
@@ -242,7 +242,7 @@ export class StudyProgress {
     });
   }
 
-  get hasTaken(): boolean {
+  hasTaken(): this is TakenProgress {
     return this.progressState === "taken";
   }
 
@@ -283,5 +283,14 @@ class ReservedProgress extends StudyProgress {
   constructor(args: StudyProgressArgs & { readonly reservation: Schedule }) {
     super(args);
     this.reservation = args.reservation;
+  }
+}
+
+class TakenProgress extends StudyProgress {
+  public readonly taken: Schedule;
+
+  constructor(args: StudyProgressArgs & { readonly taken: Schedule }) {
+    super(args);
+    this.taken = args.taken;
   }
 }

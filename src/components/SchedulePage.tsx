@@ -33,7 +33,9 @@ export const SchedulePage: FC<SchedulePageProps> = ({
     setStudyProgressRepo((repo) => {
       const { 教科, ...schedule } = selectedSchedule;
       const progress = repo.getProgress(教科);
-      return progress.hasTaken ? repo.untake(教科) : repo.take(教科, schedule);
+      return progress.hasTaken()
+        ? repo.untake(教科)
+        : repo.take(教科, schedule);
     });
   };
   const onCheckReservation = () => {

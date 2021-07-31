@@ -43,7 +43,7 @@ const ReservationCheckbox: FC<ReservationCheckboxProps> = ({
           onChange={onCheckReservation}
           disabled={
             (!progress.hasReserved() && isPast(selectedSchedule.date)) ||
-            progress.hasTaken
+            progress.hasTaken()
           }
           {...renderCheckboxState(selectedSchedule, reservedSchedule)}
         />
@@ -85,7 +85,7 @@ const JigenDialogContent: FC<JigenDialogContentProps> = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={progress.hasTaken}
+              checked={progress.hasTaken()}
               color="default"
               onChange={onCheck履修}
             />
