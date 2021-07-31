@@ -4,6 +4,7 @@ import {
   List,
   ListItem,
   ListItemIcon,
+  ListItemSecondaryAction,
   ListItemText,
 } from "@material-ui/core";
 import React, { FC } from "react";
@@ -14,6 +15,7 @@ import { StudyProgress } from "../repositories/study-progress";
 import { routes } from "../router";
 import { ReservationSchedule } from "../schedule";
 import { 教科 } from "../types";
+import { AddScheduleToGoogleCalendar } from "./AddScheduleToGoogleCalendar";
 import { DateTime } from "./DateTime";
 import { ScheduleInterval } from "./ScheduleInterval";
 
@@ -72,6 +74,9 @@ const ProgressListItem: FC<ProgressListItemProps> = ({ progress }) => {
           () => null
         )}
       </ListItemText>
+      <ListItemSecondaryAction>
+        <AddScheduleToGoogleCalendar progress={progress} />
+      </ListItemSecondaryAction>
     </C>
   );
 };

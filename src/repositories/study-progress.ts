@@ -288,7 +288,7 @@ export class StudyProgress {
   }
 }
 
-class ReservedProgress extends StudyProgress {
+export class ReservedProgress extends StudyProgress {
   public readonly reservation: Schedule;
 
   constructor(args: StudyProgressArgs & { readonly reservation: Schedule }) {
