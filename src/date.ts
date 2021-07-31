@@ -9,11 +9,14 @@ import {
 import { ja } from "date-fns/locale";
 import { Just, Maybe, None } from "./maybe";
 export {
+  add,
   formatISO as formatDate,
   isEqual,
   isPast,
+  set,
   startOfToday,
 } from "date-fns";
+export type { Duration } from "date-fns";
 
 const assumeValid = (date: Date): Maybe<Date> =>
   isValid(date) ? new Just(date) : new None();
