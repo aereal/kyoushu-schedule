@@ -4,18 +4,20 @@ import {
   List,
   ListItem,
   ListItemIcon,
+  ListItemSecondaryAction,
   ListItemText,
 } from "@material-ui/core";
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
 import { formatShortDate } from "../date";
 import { maybe } from "../maybe";
-import { periodTimeRange } from "../period";
 import { StudyProgress } from "../repositories/study-progress";
 import { routes } from "../router";
-import { formatTerm } from "../term";
+import { ReservationSchedule } from "../schedule";
 import { 教科 } from "../types";
+import { AddScheduleToGoogleCalendar } from "./AddScheduleToGoogleCalendar";
 import { DateTime } from "./DateTime";
+import { ScheduleInterval } from "./ScheduleInterval";
 
 const renderProps = (
   progress: StudyProgress
@@ -40,7 +42,7 @@ const ProgressListItem: FC<ProgressListItemProps> = ({ progress }) => {
             children={children}
             component="a"
             {...routes.schedule({
-              schedule: { ...schedule, 教科: progress.subject },
+              schedule: ReservationSchedule.from(schedule, progress.subject),
             }).link}
           />
         ),
@@ -61,15 +63,20 @@ const ProgressListItem: FC<ProgressListItemProps> = ({ progress }) => {
       <ListItemText>
         {progress.subject}{" "}
         {maybe(progress.reservation).fold(
-          ({ date, 時限 }) => (
+          (schedule) => (
             <>
-              <DateTime dateTime={date}>{formatShortDate(date)}</DateTime>{" "}
-              {時限}時限目 {formatTerm(periodTimeRange[時限])}
+              <DateTime dateTime={schedule.date}>
+                {formatShortDate(schedule.date)}
+              </DateTime>{" "}
+              {schedule.時限}時限目 <ScheduleInterval schedule={schedule} />
             </>
           ),
           () => null
         )}
       </ListItemText>
+      <ListItemSecondaryAction>
+        <AddScheduleToGoogleCalendar progress={progress} />
+      </ListItemSecondaryAction>
     </C>
   );
 };

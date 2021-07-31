@@ -9,16 +9,16 @@ import {
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
 import { formatShortDate, isPast } from "../date";
-import { equalsSchedule, ReservationSchedule, Schedule } from "../schedule";
+import { ReservationSchedule, Schedule } from "../schedule";
 import { DateTime } from "./DateTime";
 
 const renderCheckboxState = (
-  currentSchedule: ReservationSchedule,
+  currentSchedule: Schedule,
   reservedSchedule: Schedule | undefined
 ): Pick<CheckboxProps, "checked" | "indeterminate"> =>
   reservedSchedule === undefined
     ? { checked: false }
-    : equalsSchedule(reservedSchedule, currentSchedule)
+    : reservedSchedule.equals(currentSchedule)
     ? { checked: true }
     : { indeterminate: true };
 
@@ -43,7 +43,7 @@ const ReservationCheckbox: FC<ReservationCheckboxProps> = ({
           onChange={onCheckReservation}
           disabled={
             (!progress.hasReserved() && isPast(selectedSchedule.date)) ||
-            progress.hasTaken
+            progress.hasTaken()
           }
           {...renderCheckboxState(selectedSchedule, reservedSchedule)}
         />
@@ -85,7 +85,7 @@ const JigenDialogContent: FC<JigenDialogContentProps> = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={progress.hasTaken}
+              checked={progress.hasTaken()}
               color="default"
               onChange={onCheck履修}
             />

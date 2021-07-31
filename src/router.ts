@@ -39,11 +39,14 @@ export const scheduleSerializer: ValueSerializer<ReservationSchedule> = {
       .flatMap(([a, b, c]) =>
         parse時限(a).flatMap((時限) =>
           parse教科(b).flatMap((教科) =>
-            parseDate(c).map<ReservationSchedule | typeof noMatch>((date) => ({
-              date,
-              時限,
-              教科,
-            }))
+            parseDate(c).map<ReservationSchedule | typeof noMatch>(
+              (date) =>
+                new ReservationSchedule({
+                  date,
+                  時限,
+                  教科,
+                })
+            )
           )
         )
       )

@@ -9,7 +9,11 @@ import { Maybe, maybe } from "../maybe";
 import { Schedule } from "../schedule";
 import { 教科, 教科一覧, 時限 } from "../types";
 
-export const studyProgressStates = ["not-taken", "reserved", "taken"] as const;
+export const studyProgressStates = [
+  "no-schedule",
+  "reserved",
+  "taken",
+] as const;
 export const [progressNotTaken, progressReserved, progressTaken] =
   studyProgressStates;
 export type StudyProgressState = typeof studyProgressStates[number];
@@ -28,10 +32,13 @@ const serializeSchedule = (schedule: Schedule): SerializedSchedule => ({
 });
 
 const deserializeSchedule = (serialized: SerializedSchedule): Maybe<Schedule> =>
-  parseDate(serialized.date).map((date) => ({
-    ...serialized,
-    date,
-  }));
+  parseDate(serialized.date).map(
+    (date) =>
+      new Schedule({
+        ...serialized,
+        date,
+      })
+  );
 
 type StudyProgressMap = Readonly<
   {
@@ -116,7 +123,7 @@ export class StudyProgressRepository {
   }
 
   public hasTaken(subject: 教科): boolean {
-    return this.getProgress(subject).hasTaken;
+    return this.getProgress(subject).hasTaken();
   }
 
   public getProgress(subject: 教科): StudyProgress {
@@ -126,7 +133,7 @@ export class StudyProgressRepository {
   public getTakenSubjects(): readonly 教科[] {
     const ret: 教科[] = [];
     for (const [subject, progress] of this.entries()) {
-      if (progress.hasTaken) {
+      if (progress.hasTaken()) {
         ret.push(subject);
       }
     }
@@ -227,7 +234,7 @@ export class StudyProgress {
     if (this.reservation !== undefined) {
       return "reserved";
     }
-    return "not-taken";
+    return "no-schedule";
   }
 
   private updated(reservation?: Schedule, taken?: Schedule): StudyProgress {
@@ -238,7 +245,7 @@ export class StudyProgress {
     });
   }
 
-  get hasTaken(): boolean {
+  hasTaken(): this is TakenProgress {
     return this.progressState === "taken";
   }
 
@@ -246,16 +253,24 @@ export class StudyProgress {
     return this.progressState === "reserved";
   }
 
-  public reserve(schedule?: Schedule): StudyProgress {
-    return this.updated(schedule, this.taken);
+  public reserve(schedule: Schedule): ReservedProgress {
+    return new ReservedProgress({
+      subject: this.subject,
+      reservation: schedule,
+      taken: this.taken,
+    });
   }
 
   public releaseReservation(): StudyProgress {
     return this.updated(undefined, this.taken);
   }
 
-  public take(schedule: Schedule): StudyProgress {
-    return this.updated(this.reservation, schedule);
+  public take(schedule: Schedule): TakenProgress {
+    return new TakenProgress({
+      subject: this.subject,
+      reservation: this.reservation,
+      taken: schedule,
+    });
   }
 
   public untake(): StudyProgress {
@@ -273,11 +288,20 @@ export class StudyProgress {
   }
 }
 
-class ReservedProgress extends StudyProgress {
+export class ReservedProgress extends StudyProgress {
   public readonly reservation: Schedule;
 
   constructor(args: StudyProgressArgs & { readonly reservation: Schedule }) {
     super(args);
     this.reservation = args.reservation;
+  }
+}
+
+class TakenProgress extends StudyProgress {
+  public readonly taken: Schedule;
+
+  constructor(args: StudyProgressArgs & { readonly taken: Schedule }) {
+    super(args);
+    this.taken = args.taken;
   }
 }
