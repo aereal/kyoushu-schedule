@@ -250,16 +250,24 @@ export class StudyProgress {
     return this.progressState === "reserved";
   }
 
-  public reserve(schedule?: Schedule): StudyProgress {
-    return this.updated(schedule, this.taken);
+  public reserve(schedule: Schedule): ReservedProgress {
+    return new ReservedProgress({
+      subject: this.subject,
+      reservation: schedule,
+      taken: this.taken,
+    });
   }
 
   public releaseReservation(): StudyProgress {
     return this.updated(undefined, this.taken);
   }
 
-  public take(schedule: Schedule): StudyProgress {
-    return this.updated(this.reservation, schedule);
+  public take(schedule: Schedule): TakenProgress {
+    return new TakenProgress({
+      subject: this.subject,
+      reservation: this.reservation,
+      taken: schedule,
+    });
   }
 
   public untake(): StudyProgress {
