@@ -11,7 +11,7 @@ import {
   progressReserved,
   progressTaken,
 } from "../repositories/study-progress";
-import { equalsSchedule, ReservationSchedule } from "../schedule";
+import { ReservationSchedule } from "../schedule";
 import "../theme";
 import { 教科, 教科一覧 } from "../types";
 
@@ -74,7 +74,7 @@ export const OpenReservationButton: FC<OpenReservationButtonProps> = ({
     [progressReserved]: `subject${教科}-reserved` as ReservedSubjectColorClass,
   }[progress.progressState];
   const exactDay =
-    progress.hasReserved() && equalsSchedule(progress.reservation, schedule);
+    progress.hasReserved() && progress.reservation.equals(schedule);
   return (
     <Button
       onClick={onClick.bind(null, schedule)}

@@ -32,10 +32,13 @@ const serializeSchedule = (schedule: Schedule): SerializedSchedule => ({
 });
 
 const deserializeSchedule = (serialized: SerializedSchedule): Maybe<Schedule> =>
-  parseDate(serialized.date).map((date) => ({
-    ...serialized,
-    date,
-  }));
+  parseDate(serialized.date).map(
+    (date) =>
+      new Schedule({
+        ...serialized,
+        date,
+      })
+  );
 
 type StudyProgressMap = Readonly<
   {

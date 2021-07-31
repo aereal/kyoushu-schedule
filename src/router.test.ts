@@ -10,11 +10,11 @@ describe("scheduleSerializer", () => {
     serialized: string;
   }>([
     {
-      schedule: {
+      schedule: new ReservationSchedule({
         date: mustParseDate("2021-02-03"),
         教科: 10,
         時限: 1,
-      },
+      }),
       serialized: "1:10:2021-02-03",
     },
   ])("serialize/deserialize", ({ schedule, serialized }) => {

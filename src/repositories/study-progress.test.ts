@@ -1,5 +1,6 @@
 import { kvsMemoryStorage, KvsMemoryStorage } from "@kvs/memorystorage";
 import { formatDate, parseDate } from "../date";
+import { Schedule } from "../schedule";
 import { Schema, StudyProgressRepository } from "./study-progress";
 
 const mustParseDate = (repr: string): Date => parseDate(repr).unsafeGet();
@@ -27,7 +28,10 @@ describe("StudyProgressRepository", () => {
     const pair = await TestRepository.forTest();
     let repo = pair[0];
     const storage = pair[1];
-    repo = repo.reserve(1, { date: mustParseDate("2021-01-01"), 時限: 1 });
+    repo = repo.reserve(
+      1,
+      new Schedule({ date: mustParseDate("2021-01-01"), 時限: 1 })
+    );
     await repo.persist();
     const [hydratedRepo, hydrated] = await TestRepository.withStorage(
       storage
@@ -57,7 +61,10 @@ describe("StudyProgressRepository", () => {
       });
       expect(repo.getTakenSubjects()).toStrictEqual([]);
     })();
-    repo = repo.reserve(1, { date: mustParseDate("2021-01-01"), 時限: 1 });
+    repo = repo.reserve(
+      1,
+      new Schedule({ date: mustParseDate("2021-01-01"), 時限: 1 })
+    );
     (() => {
       const got = repo.getProgress(1);
       expect(got.hasTaken()).toBe(false);
@@ -100,7 +107,10 @@ describe("StudyProgressRepository", () => {
       });
       expect(repo.getTakenSubjects()).toStrictEqual([]);
     })();
-    repo = repo.take(1, { date: mustParseDate("2021-01-01"), 時限: 1 });
+    repo = repo.take(
+      1,
+      new Schedule({ date: mustParseDate("2021-01-01"), 時限: 1 })
+    );
     (() => {
       expect(repo.hasTaken(1)).toBe(true);
       const got = repo.getProgress(1);

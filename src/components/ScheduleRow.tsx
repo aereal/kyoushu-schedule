@@ -47,11 +47,13 @@ export const ScheduleRow: FC<ScheduleRowProps> = ({
           ) : (
             <OpenReservationButton
               onClick={onClickOpenReservationButton}
-              schedule={{
-                date,
-                時限: (idx + 1) as 時限,
-                教科: kyouka,
-              }}
+              schedule={
+                new ReservationSchedule({
+                  date,
+                  時限: (idx + 1) as 時限,
+                  教科: kyouka,
+                })
+              }
             />
           )}
         </TableCell>

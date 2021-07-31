@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { Route } from "type-route";
 import { StudyProgressRepository } from "../repositories/study-progress";
 import { groups, routes } from "../router";
-import { equalsSchedule, ReservationSchedule } from "../schedule";
+import { ReservationSchedule } from "../schedule";
 import { JigenDialog } from "./JigenDialog";
 import { SchedulesList } from "./SchedulesList";
 
@@ -31,11 +31,11 @@ export const SchedulePage: FC<SchedulePageProps> = ({
       return;
     }
     setStudyProgressRepo((repo) => {
-      const { 教科, ...schedule } = selectedSchedule;
+      const { 教科 } = selectedSchedule;
       const progress = repo.getProgress(教科);
       return progress.hasTaken()
         ? repo.untake(教科)
-        : repo.take(教科, schedule);
+        : repo.take(教科, selectedSchedule);
     });
   };
   const onCheckReservation = () => {
@@ -43,12 +43,12 @@ export const SchedulePage: FC<SchedulePageProps> = ({
       return;
     }
     setStudyProgressRepo((repo) => {
-      const { 教科, ...schedule } = selectedSchedule;
+      const { 教科 } = selectedSchedule;
       const progress = repo.getProgress(教科);
       return progress.hasReserved() &&
-        equalsSchedule(progress.reservation, schedule)
+        progress.reservation.equals(selectedSchedule)
         ? repo.releaseReservation(教科)
-        : repo.reserve(教科, schedule);
+        : repo.reserve(教科, selectedSchedule);
     });
   };
   return (

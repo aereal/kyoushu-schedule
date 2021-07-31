@@ -13,6 +13,7 @@ import { maybe } from "../maybe";
 import { periodTimeRange } from "../period";
 import { StudyProgress } from "../repositories/study-progress";
 import { routes } from "../router";
+import { ReservationSchedule } from "../schedule";
 import { formatTerm } from "../term";
 import { 教科 } from "../types";
 import { DateTime } from "./DateTime";
@@ -40,7 +41,10 @@ const ProgressListItem: FC<ProgressListItemProps> = ({ progress }) => {
             children={children}
             component="a"
             {...routes.schedule({
-              schedule: { ...schedule, 教科: progress.subject },
+              schedule: new ReservationSchedule({
+                ...schedule,
+                教科: progress.subject,
+              }),
             }).link}
           />
         ),

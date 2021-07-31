@@ -9,16 +9,16 @@ import {
 import React, { FC } from "react";
 import { useStudyProgressRepository } from "../contexts/study-progress-repo";
 import { formatShortDate, isPast } from "../date";
-import { equalsSchedule, ReservationSchedule, Schedule } from "../schedule";
+import { ReservationSchedule, Schedule } from "../schedule";
 import { DateTime } from "./DateTime";
 
 const renderCheckboxState = (
-  currentSchedule: ReservationSchedule,
+  currentSchedule: Schedule,
   reservedSchedule: Schedule | undefined
 ): Pick<CheckboxProps, "checked" | "indeterminate"> =>
   reservedSchedule === undefined
     ? { checked: false }
-    : equalsSchedule(reservedSchedule, currentSchedule)
+    : reservedSchedule.equals(currentSchedule)
     ? { checked: true }
     : { indeterminate: true };
 
